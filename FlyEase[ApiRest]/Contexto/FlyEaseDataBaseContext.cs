@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace FlyEase_ApiRest_.Contexto;
 
@@ -45,7 +47,6 @@ public partial class FlyEaseDataBaseContext : DbContext
     public virtual DbSet<Vuelo> Vuelos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=localhost;Database=FlyEaseDataBase;Username=admin;Password=system");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

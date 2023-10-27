@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -18,6 +19,6 @@ public partial class Cliente
     public string Correo { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<Boleto> Boletos { get; set; } = new List<Boleto>();
 }
