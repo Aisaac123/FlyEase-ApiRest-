@@ -9,6 +9,10 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class CiudadesController : CrudController<Ciudad, int, FlyEaseDataBaseContext>
     {
+        public CiudadesController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
         protected override async Task<string> InsertProcedure(Ciudad entity)
         {
             try

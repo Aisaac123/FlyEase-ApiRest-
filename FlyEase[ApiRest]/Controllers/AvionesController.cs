@@ -8,6 +8,11 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContext>
     {
+        public AvionesController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
+
         protected override async Task<string> InsertProcedure(Avion entity)
         {
             try

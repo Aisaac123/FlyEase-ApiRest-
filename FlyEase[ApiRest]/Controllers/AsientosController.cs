@@ -8,6 +8,11 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class AsientosController : CrudController<Asiento, int, FlyEaseDataBaseContext>
     {
+        public AsientosController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
+
         protected override async Task<string> InsertProcedure(Asiento entity)
         {
             try

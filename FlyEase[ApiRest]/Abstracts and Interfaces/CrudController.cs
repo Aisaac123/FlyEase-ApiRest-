@@ -5,9 +5,9 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
     public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext> where TEntity : class where TContext : DbContext, new()
     {
-
-        public CrudController()
+        protected CrudController(TContext context) : base(context)
         {
+            _context = context;
         }
 
         [HttpPost]

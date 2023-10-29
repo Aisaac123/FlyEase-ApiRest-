@@ -12,9 +12,9 @@ where TContext : DbContext, new()
 
 
         protected TContext _context;
-        public ReadController()
+        public ReadController(TContext context)
         {
-            _context = new TContext();
+            _context = context;
         }
 
         [HttpGet]

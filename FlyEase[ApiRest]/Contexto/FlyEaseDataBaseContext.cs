@@ -46,8 +46,8 @@ public partial class FlyEaseDataBaseContext : DbContext
 
     public virtual DbSet<Vuelo> Vuelos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Host=localhost;Database=FlyEaseDataBase;Username=admin;Password=system");
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //    => optionsBuilder.UseNpgsql("Host=ep-calm-wood-66281423.us-east-2.aws.neon.fl0.io;Database=FlyEaseDataBase;Username=fl0user;Password=ljIrdn0WacR3");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

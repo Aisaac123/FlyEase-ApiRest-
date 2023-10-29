@@ -9,6 +9,10 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class AereopuertosController : CrudController<Aereopuerto, int, FlyEaseDataBaseContext>
     {
+        public AereopuertosController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
 
         protected override async Task<string> InsertProcedure(Aereopuerto entity)
         {

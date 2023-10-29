@@ -8,6 +8,10 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContext>
     {
+        public AdministradoresController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         [Route("GetByDocument/{AdminDocument}")]

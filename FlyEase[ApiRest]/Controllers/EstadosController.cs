@@ -6,5 +6,9 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class EstadosController : ReadController<Estado, int, FlyEaseDataBaseContext>
     {
+        public EstadosController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
     }
 }

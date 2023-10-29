@@ -8,6 +8,11 @@ namespace FlyEase_ApiRest_.Controllers
 {
     public class RegionesController : CrudController<Region, int, FlyEaseDataBaseContext>
     {
+        public RegionesController(FlyEaseDataBaseContext context) : base(context)
+        {
+            _context = context;
+        }
+
         protected override async Task<string> InsertProcedure(Region entity)
         {
             try
