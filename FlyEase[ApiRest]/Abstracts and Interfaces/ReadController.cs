@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
+    [EnableCors("CorsRules")]
     [Route("FlyEaseApi/[controller]")]
     [ApiController]
     public abstract class ReadController<TEntity,IdType, TContext> : Controller, IControllerRead<IdType>
