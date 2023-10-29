@@ -21,9 +21,9 @@ public partial class Boleto
 
     public DateTime? Fecharegistro { get; set; }
 
-    public virtual Asiento IdasientoNavigation { get; set; }
+    public virtual Asiento Asiento { get; set; }
 
-    public virtual Vuelo IdvueloNavigation { get; set; }
+    public virtual Vuelo Vuelo { get; set; }
 
-    public virtual Cliente NumerodocumentoNavigation { get; set; }
+    public virtual Cliente Cliente { get; set; }
 }

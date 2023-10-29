@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -10,21 +8,21 @@ public partial class Aereopuerto
 
     public string Nombre { get; set; }
 
+    [JsonIgnore]
     public int? Idcoordenada { get; set; }
 
+    [JsonIgnore]
     public int? Idciudad { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
 
-    public virtual Ciudad IdciudadNavigation { get; set; }
+    public virtual Ciudad Ciudad { get; set; }
 
-    public virtual Coordenada IdcoordenadaNavigation { get; set; }
-
-    [JsonIgnore]
-
-    public virtual ICollection<Vuelo> VueloIddespegueNavigations { get; set; } = new List<Vuelo>();
+    public virtual Coordenada Coordenadas { get; set; }
 
     [JsonIgnore]
+    public virtual ICollection<Vuelo> Despegues { get; set; } = new List<Vuelo>();
 
-    public virtual ICollection<Vuelo> VueloIddestinoNavigations { get; set; } = new List<Vuelo>();
+    [JsonIgnore]
+    public virtual ICollection<Vuelo> Destinos { get; set; } = new List<Vuelo>();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -13,7 +14,8 @@ public partial class Ciudad
 
     public DateTime? Fecharegistro { get; set; }
 
-    public virtual ICollection<Aereopuerto> Aereopuertos { get; set; } = new List<Aereopuerto>();
+    [JsonIgnore]
+    public virtual ICollection<Aereopuerto> ListaAereopuertos { get; set; } = new List<Aereopuerto>();
 
-    public virtual Region IdregionNavigation { get; set; }
+    public virtual Region Region { get; set; }
 }

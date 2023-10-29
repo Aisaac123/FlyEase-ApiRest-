@@ -155,12 +155,12 @@ public partial class FlyEaseDataBaseContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
 
-            entity.HasOne(d => d.IdciudadNavigation).WithMany(p => p.Aereopuertos)
+            entity.HasOne(d => d.Ciudad).WithMany(p => p.ListaAereopuertos)
                 .HasForeignKey(d => d.Idciudad)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_aereopuertos_idciudad");
 
-            entity.HasOne(d => d.IdcoordenadaNavigation).WithOne(p => p.Aereopuerto)
+            entity.HasOne(d => d.Coordenadas).WithOne(p => p.Aereopuerto)
                 .HasForeignKey<Aereopuerto>(d => d.Idcoordenada)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_aereopuertos_idcoordenada");
@@ -189,12 +189,12 @@ public partial class FlyEaseDataBaseContext : DbContext
             entity.Property(e => e.Idcategoria).HasColumnName("idcategoria");
             entity.Property(e => e.Posicion).HasColumnName("posicion");
 
-            entity.HasOne(d => d.IdavionNavigation).WithMany(p => p.Asientos)
+            entity.HasOne(d => d.Avion).WithMany(p => p.Asientos)
                 .HasForeignKey(d => d.Idavion)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_asientos_idavion");
 
-            entity.HasOne(d => d.IdcategoriaNavigation).WithMany(p => p.Asientos)
+            entity.HasOne(d => d.Categoria).WithMany(p => p.Asientos)
                 .HasForeignKey(d => d.Idcategoria)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_asientos_idcategoria");
@@ -230,7 +230,7 @@ public partial class FlyEaseDataBaseContext : DbContext
                 .HasColumnName("nombre");
             entity.Property(e => e.Velocidadpromedio).HasColumnName("velocidadpromedio");
 
-            entity.HasOne(d => d.IdaereolineaNavigation).WithMany(p => p.Aviones)
+            entity.HasOne(d => d.Aereolinea).WithMany(p => p.Aviones)
                 .HasForeignKey(d => d.Idaereolinea)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_aviones_idaereolinea");
@@ -256,17 +256,17 @@ public partial class FlyEaseDataBaseContext : DbContext
             entity.Property(e => e.Precio).HasColumnName("precio");
             entity.Property(e => e.Preciototal).HasColumnName("preciototal");
 
-            entity.HasOne(d => d.IdasientoNavigation).WithMany(p => p.Boletos)
+            entity.HasOne(d => d.Asiento).WithMany(p => p.Boletos)
                 .HasForeignKey(d => d.Idasiento)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_boletos_idasiento");
 
-            entity.HasOne(d => d.IdvueloNavigation).WithMany(p => p.Boletos)
+            entity.HasOne(d => d.Vuelo).WithMany(p => p.Boletos)
                 .HasForeignKey(d => d.Idvuelo)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_boletos_idvuelo");
 
-            entity.HasOne(d => d.NumerodocumentoNavigation).WithMany(p => p.Boletos)
+            entity.HasOne(d => d.Cliente).WithMany(p => p.Boletos)
                 .HasForeignKey(d => d.Numerodocumento)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_boletos_numerodocumento");
@@ -318,7 +318,7 @@ public partial class FlyEaseDataBaseContext : DbContext
                 .HasMaxLength(60)
                 .HasColumnName("nombre");
 
-            entity.HasOne(d => d.IdregionNavigation).WithMany(p => p.Ciudades)
+            entity.HasOne(d => d.Region).WithMany(p => p.Ciudades)
                 .HasForeignKey(d => d.Idregion)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_ciudades_idregion");
@@ -433,7 +433,7 @@ public partial class FlyEaseDataBaseContext : DbContext
                 .HasMaxLength(60)
                 .HasColumnName("nombre");
 
-            entity.HasOne(d => d.IdpaisNavigation).WithMany(p => p.Regiones)
+            entity.HasOne(d => d.Pais).WithMany(p => p.Regiones)
                 .HasForeignKey(d => d.Idpais)
                 .HasConstraintName("fk_regiones_idpais");
         });
@@ -474,22 +474,22 @@ public partial class FlyEaseDataBaseContext : DbContext
             entity.Property(e => e.Preciovuelo).HasColumnName("preciovuelo");
             entity.Property(e => e.Tarifatemporada).HasColumnName("tarifatemporada");
 
-            entity.HasOne(d => d.IdavionNavigation).WithMany(p => p.Vuelos)
+            entity.HasOne(d => d.Avion).WithMany(p => p.Vuelos)
                 .HasForeignKey(d => d.Idavion)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_idavion");
 
-            entity.HasOne(d => d.IddespegueNavigation).WithMany(p => p.VueloIddespegueNavigations)
+            entity.HasOne(d => d.Aereopuerto_Despegue).WithMany(p => p.Despegues)
                 .HasForeignKey(d => d.Iddespegue)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_iddespegue");
 
-            entity.HasOne(d => d.IddestinoNavigation).WithMany(p => p.VueloIddestinoNavigations)
+            entity.HasOne(d => d.Aereopuerto_Destino).WithMany(p => p.Destinos)
                 .HasForeignKey(d => d.Iddestino)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_iddestino");
 
-            entity.HasOne(d => d.IdestadoNavigation).WithMany(p => p.Vuelos)
+            entity.HasOne(d => d.Estado).WithMany(p => p.Vuelos)
                 .HasForeignKey(d => d.Idestado)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_idestado");

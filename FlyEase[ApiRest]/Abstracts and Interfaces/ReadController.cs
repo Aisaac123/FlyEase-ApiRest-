@@ -3,14 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
-    public abstract class ReadController<TEntity,IdType, TContext> : ControllerBase, IControllerRead<IdType>
+    [Route("FlyEaseApi/[controller]")]
+    [ApiController]
+    public abstract class ReadController<TEntity,IdType, TContext> : Controller, IControllerRead<IdType>
 where TEntity : class
-where TContext : DbContext
+where TContext : DbContext, new()
     {
+
+
         protected TContext _context;
-        public ReadController(TContext context)
+        public ReadController()
         {
-            _context = context;
+            _context = new TContext();
         }
 
         [HttpGet]
@@ -20,12 +24,12 @@ where TContext : DbContext
             List<TEntity> lista = new();
             try
             {
-                lista = await _context.Set<TEntity>().ToListAsync();
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = lista });
+                lista = await SetContextList();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, response = lista });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, response = lista });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false, response = lista });
             }
         }
 
@@ -35,18 +39,27 @@ where TContext : DbContext
         {
             try
             {
-                var id_s = id.ToString();
-                var entity = await _context.Set<TEntity>().FindAsync(id_s);
+                var entity = await SetContextEntity(id);
                 if (entity == null)
                 {
                     return BadRequest("No se ha encontrado");
                 }
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = entity });
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = false, response = entity });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false });
             }
+        }
+        protected async virtual Task<List<TEntity>> SetContextList()
+        {
+            var list = await _context.Set<TEntity>().ToListAsync();
+            return list;
+        }
+        protected async virtual Task<TEntity> SetContextEntity(IdType id)
+        {
+            var entity = await _context.Set<TEntity>().FindAsync(id);
+            return entity;
         }
     }
 }

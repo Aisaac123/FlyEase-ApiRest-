@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using FlyEase_ApiRest_.Contexto;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +15,11 @@ builder.Services.AddDbContext<FlyEaseDataBaseContext>(con => con.UseNpgsql(build
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("WebAccess", policy => policy.RequireRole("UsuarioWeb"));
+    options.AddPolicy("ManagerAccess", policy => policy.RequireRole("UsuarioEscritorio"));
 });
 var app = builder.Build();
 

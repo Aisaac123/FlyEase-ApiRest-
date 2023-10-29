@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -20,25 +19,30 @@ public partial class Vuelo
 
     public BitArray Cupo { get; set; }
 
+    [JsonIgnore]
     public int? Iddespegue { get; set; }
 
+    [JsonIgnore]
     public int? Iddestino { get; set; }
 
+    [JsonIgnore]
     public int? Idestado { get; set; }
 
+    [JsonIgnore]
     public string Idavion { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
 
     public DateTime Fechayhoradesalida { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Boleto> Boletos { get; set; } = new List<Boleto>();
 
-    public virtual Avion IdavionNavigation { get; set; }
+    public virtual Avion Avion { get; set; }
 
-    public virtual Aereopuerto IddespegueNavigation { get; set; }
+    public virtual Aereopuerto Aereopuerto_Despegue { get; set; }
 
-    public virtual Aereopuerto IddestinoNavigation { get; set; }
+    public virtual Aereopuerto Aereopuerto_Destino { get; set; }
 
-    public virtual Estado IdestadoNavigation { get; set; }
+    public virtual Estado Estado { get; set; }
 }

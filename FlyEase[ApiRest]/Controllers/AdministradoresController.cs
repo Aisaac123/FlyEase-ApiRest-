@@ -6,18 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContext>
     {
-        private readonly FlyEaseDataBaseContext _context;
-
-        public AdministradoresController(FlyEaseDataBaseContext context): base(context)
-        {
-            _context = context;
-        }
-
-
 
         [HttpGet]
         [Route("GetByDocument/{AdminDocument}")]

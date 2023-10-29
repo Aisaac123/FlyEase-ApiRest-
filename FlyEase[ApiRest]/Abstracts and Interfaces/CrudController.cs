@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
-    public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext> where TEntity : class where TContext : DbContext
+    public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext> where TEntity : class where TContext : DbContext, new()
     {
-        public CrudController(TContext context) : base(context)
+
+        public CrudController()
         {
-            _context = context;
         }
 
         [HttpPost]
         [Route("Post")]
-        public async Task<IActionResult> Post([FromBody] TEntity entity)
+        public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             try
             {
@@ -20,57 +20,74 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 if (mensaje == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", response = entity });
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Success = true, response = entity });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Success = false });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Success = false });
             }
         }
 
         [HttpPut]
-        [Route("Put")]
-        public async Task<IActionResult> Put([FromBody] TEntity entity, IdType OldId)
+        [Route("Put/{Id}")]
+        public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
             try
             {
-                var mensaje = await UpdateProcedure(entity, OldId);
+                var mensaje = await UpdateProcedure(entity, Id);
                 if (mensaje.ToString() == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", response = entity });
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Success = true, response = entity });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Success = false });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Success = false });
             }
         }
 
         [HttpDelete]
-        [Route("Delete/{Old_Id}")]
-        public async Task<IActionResult> Delete(IdType Old_Id)
+        [Route("Delete/{Id}")]
+        public virtual async Task<IActionResult> Delete(IdType Id)
         {
-            var id = Old_Id.ToString();
             try
             {
-                var mensaje = await DeleteProcedure(Old_Id);
+
+
+                var mensaje = await DeleteProcedure(Id);
                 if (mensaje.ToString() == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito" });
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Succes = true });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Succes = false });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false });
             }
         }
 
+        [HttpDelete]
+        [Route("DeleteAll")]
+        public virtual async Task<IActionResult> DeleteAll()
+        {
+            try
+            {
+                var entities = await _context.Set<TEntity>().ToListAsync();
+                _context.Set<TEntity>().RemoveRange(entities);
+                _context.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Ok", Succes = true });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false });
+            }
+        }
 
         protected abstract Task<string> InsertProcedure(TEntity entity);
 

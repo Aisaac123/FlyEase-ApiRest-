@@ -7,17 +7,8 @@ using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContext>
     {
-        private readonly FlyEaseDataBaseContext _context;
-
-        public ClientesController(FlyEaseDataBaseContext context) : base(context)
-        {
-            _context = context;
-        }
-
         protected override async Task<string> InsertProcedure(Cliente entity)
         {
             try

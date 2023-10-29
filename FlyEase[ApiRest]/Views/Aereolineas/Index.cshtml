@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FlyEase_ApiRest_.Models.Aereolinea>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigoiata)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigoicao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecharegistro)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigoiata)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigoicao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecharegistro)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Idaereolinea">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Idaereolinea">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Idaereolinea">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
