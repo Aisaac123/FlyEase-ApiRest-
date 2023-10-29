@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FlyEaseDataBaseContext>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("SqlConnection")));
+builder.Services.AddDbContext<FlyEaseDataBaseContext>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
