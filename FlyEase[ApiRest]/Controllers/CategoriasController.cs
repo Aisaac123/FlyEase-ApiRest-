@@ -1,12 +1,15 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
+
     public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContext>
     {
         public CategoriasController(FlyEaseDataBaseContext context) : base(context)
@@ -21,7 +24,7 @@ namespace FlyEase_ApiRest_.Controllers
                 {
             new NpgsqlParameter("v_nombre", entity.Nombre),
             new NpgsqlParameter("v_descripcion", entity.Descripcion),
-            new NpgsqlParameter("v_estadocategoria", entity.Estadocategoria),
+            new NpgsqlParameter("v_estadocategoria", bool.Parse(entity.Estadocategoria.ToString())),
             new NpgsqlParameter("v_tarifa", entity.Tarifa)
                 };
 

@@ -16,7 +16,7 @@ builder.Services.AddControllers().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-var CorsRules = "CorsRules";
+var CorsRules = "Reglas";
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy(name: CorsRules, builder =>
@@ -25,24 +25,21 @@ builder.Services.AddCors(opt =>
     });
 });
 
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("WebAccess", policy => policy.RequireRole("UsuarioWeb"));
-    options.AddPolicy("ManagerAccess", policy => policy.RequireRole("UsuarioEscritorio"));
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("WebAccess", policy => policy.RequireRole("UsuarioWeb"));
+//    options.AddPolicy("ManagerAccess", policy => policy.RequireRole("UsuarioEscritorio"));
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-   
 //}
+app.UseCors(CorsRules);
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseCors(CorsRules);
 
 app.UseHttpsRedirection();
 

@@ -1,11 +1,13 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContext>
     {
         public AdministradoresController(FlyEaseDataBaseContext context) : base(context)

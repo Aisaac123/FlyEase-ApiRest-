@@ -1,11 +1,13 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
     public class BoletosController : CrudController<Boleto, int, FlyEaseDataBaseContext>
     {
         public BoletosController(FlyEaseDataBaseContext context) : base(context)
@@ -79,29 +81,68 @@ namespace FlyEase_ApiRest_.Controllers
         protected override async Task<List<Boleto>> SetContextList()
         {
             var list = await _context.Set<Boleto>()
-          .Include(a => a.Asiento)
-          .ThenInclude(a => a.Avion)
-          .ThenInclude(a => a.Aereolinea)
-          .Include(a => a.Vuelo)
-          .ThenInclude(a => a.Aereopuerto_Despegue)
-          .ThenInclude(a => a.Ciudad)
-          .ThenInclude(a => a.Region)
-          .ThenInclude(a => a.Pais)
-         .ToListAsync();
+                .Include(arg => arg.Cliente)
+                .Include(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Avion)
+                    .ThenInclude(arg => arg.Aereolinea)
+                .Include(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Categoria) 
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Estado)
+                .ToListAsync();
+
+            // Eliminar repeticiones:
+            list = list.GroupBy(boleto => boleto.Asiento.Idasiento).Select(group => group.First()).ToList();
+            list = list.GroupBy(boleto => boleto.Vuelo.Idvuelo).Select(group => group.First()).ToList();
+            list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Despegue.Idaereopuerto).Select(group => group.First()).ToList();
+            list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Destino.Idaereopuerto).Select(group => group.First()).ToList();
+
             return list;
         }
 
         protected override async Task<Boleto> SetContextEntity(int id)
         {
             var entity = await _context.Set<Boleto>()
-         .Include(a => a.Asiento)
-          .ThenInclude(a => a.Avion)
-          .ThenInclude(a => a.Aereolinea)
-          .Include(a => a.Vuelo)
-          .ThenInclude(a => a.Aereopuerto_Despegue)
-          .ThenInclude(a => a.Ciudad)
-          .ThenInclude(a => a.Region)
-          .ThenInclude(a => a.Pais)
+                .Include(arg => arg.Cliente)
+                .Include(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Avion)
+                    .ThenInclude(arg => arg.Aereolinea)
+                .Include(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Categoria) 
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Estado)
          .FirstOrDefaultAsync(a => a.Idasiento == id);
 
             return entity;

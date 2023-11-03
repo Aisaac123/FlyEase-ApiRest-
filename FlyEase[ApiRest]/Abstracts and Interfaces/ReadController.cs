@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
-    [EnableCors("CorsRules")]
+    [EnableCors("Reglas")]
     [Route("FlyEaseApi/[controller]")]
     [ApiController]
     public abstract class ReadController<TEntity,IdType, TContext> : Controller, IControllerRead<IdType>

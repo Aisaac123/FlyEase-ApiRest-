@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using System.Collections;
 
 namespace FlyEase_ApiRest_.Models;
@@ -17,7 +17,8 @@ public partial class Vuelo
 
     public DateTime Fechayhorallegada { get; set; }
 
-    public BitArray Cupo { get; set; }
+    [JsonIgnore]
+    public bool Cupo { get; set; }
 
     [JsonIgnore]
     public int? Iddespegue { get; set; }
@@ -31,6 +32,7 @@ public partial class Vuelo
     [JsonIgnore]
     public string Idavion { get; set; }
 
+    [JsonIgnore]
     public DateTime? Fecharegistro { get; set; }
 
     public DateTime Fechayhoradesalida { get; set; }

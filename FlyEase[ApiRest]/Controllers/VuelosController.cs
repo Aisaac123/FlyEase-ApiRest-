@@ -1,31 +1,33 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
     public class VuelosController : CrudController<Vuelo, int, FlyEaseDataBaseContext>
     {
         public VuelosController(FlyEaseDataBaseContext context) : base(context)
         {
             _context = context;
         }
+
         protected override async Task<string> InsertProcedure(Vuelo entity)
         {
             try
             {
                 var parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("v_preciovuelo", entity.Preciovuelo),
-            new NpgsqlParameter("v_tarifatemporada", entity.Tarifatemporada),
-            new NpgsqlParameter("v_descuento", entity.Descuento),
+            new NpgsqlParameter("v_preciovuelo", double.Parse(entity.Preciovuelo.ToString())),
+            new NpgsqlParameter("v_tarifatemporada", double.Parse(entity.Tarifatemporada.ToString())),
+            new NpgsqlParameter("v_descuento", double.Parse(entity.Descuento.ToString())),
             new NpgsqlParameter("v_fechayhoradespegue", entity.Fechayhoradesalida),
             new NpgsqlParameter("v_iddespegue", entity.Aereopuerto_Despegue.Idaereopuerto),
             new NpgsqlParameter("v_iddestino", entity.Aereopuerto_Destino.Idaereopuerto),
-            new NpgsqlParameter("v_idavion", entity.Avion)
+            new NpgsqlParameter("v_idavion", entity.Avion.Idavion)
                 };
 
                 await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion)", parameters);

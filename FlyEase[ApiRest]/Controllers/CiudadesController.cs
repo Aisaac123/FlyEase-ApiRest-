@@ -1,18 +1,20 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
     public class CiudadesController : CrudController<Ciudad, int, FlyEaseDataBaseContext>
     {
         public CiudadesController(FlyEaseDataBaseContext context) : base(context)
         {
             _context = context;
         }
+
         protected override async Task<string> InsertProcedure(Ciudad entity)
         {
             try
@@ -70,6 +72,7 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+
         protected override async Task<List<Ciudad>> SetContextList()
         {
             var list = await _context.Set<Ciudad>()

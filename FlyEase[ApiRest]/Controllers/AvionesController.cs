@@ -1,11 +1,13 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    [EnableCors("Reglas")]
     public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContext>
     {
         public AvionesController(FlyEaseDataBaseContext context) : base(context)

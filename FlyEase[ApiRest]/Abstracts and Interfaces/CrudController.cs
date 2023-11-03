@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
+    [EnableCors("Reglas")]
+
     public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext> where TEntity : class where TContext : DbContext, new()
     {
+
         protected CrudController(TContext context) : base(context)
         {
             _context = context;

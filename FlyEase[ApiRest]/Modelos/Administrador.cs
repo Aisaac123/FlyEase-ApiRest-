@@ -18,7 +18,7 @@ public partial class Administrador
 
     public string Correo { get; set; }
 
-    public BitArray Estado { get; set; }
+    public bool Estado { get; set; }
 
     public string Usuario { get; set; }
 

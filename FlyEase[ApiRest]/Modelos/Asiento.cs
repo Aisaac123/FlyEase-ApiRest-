@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using System.Collections;
 
 namespace FlyEase_ApiRest_.Models;
@@ -9,7 +9,7 @@ public partial class Asiento
 
     public int Posicion { get; set; }
 
-    public BitArray Disponibilidad { get; set; }
+    public bool Disponibilidad { get; set; }
 
     [JsonIgnore]
     public int? Idcategoria { get; set; }

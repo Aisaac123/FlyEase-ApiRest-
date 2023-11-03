@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -15,8 +16,11 @@ public partial class Boleto
 
     public string Numerodocumento { get; set; }
 
+    [JsonIgnore]
+
     public int? Idasiento { get; set; }
 
+    [JsonIgnore]
     public int? Idvuelo { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
