@@ -9,7 +9,7 @@ public partial class Asiento
 
     public int Posicion { get; set; }
 
-    public bool Disponibilidad { get; set; }
+    public BitArray Disponibilidad { get; set; }
 
     [JsonIgnore]
     public int? Idcategoria { get; set; }

@@ -10,9 +10,9 @@ namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
 
-    public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContext>
+    public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContextPrueba>
     {
-        public CategoriasController(FlyEaseDataBaseContext context) : base(context)
+        public CategoriasController(FlyEaseDataBaseContextPrueba context) : base(context)
         {
             _context = context;
         }

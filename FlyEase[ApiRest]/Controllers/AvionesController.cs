@@ -8,9 +8,9 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContext>
+    public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContextPrueba>
     {
-        public AvionesController(FlyEaseDataBaseContext context) : base(context)
+        public AvionesController(FlyEaseDataBaseContextPrueba context) : base(context)
         {
             _context = context;
         }

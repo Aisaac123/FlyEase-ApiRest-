@@ -9,9 +9,9 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContext>
+    public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextPrueba>
     {
-        public ClientesController(FlyEaseDataBaseContext context) : base(context)
+        public ClientesController(FlyEaseDataBaseContextPrueba context) : base(context)
         {
             _context = context;
         }

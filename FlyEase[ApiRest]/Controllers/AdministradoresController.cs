@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContext>
+    public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextPrueba>
     {
-        public AdministradoresController(FlyEaseDataBaseContext context) : base(context)
+        public AdministradoresController(FlyEaseDataBaseContextPrueba context) : base(context)
         {
             _context = context;
         }

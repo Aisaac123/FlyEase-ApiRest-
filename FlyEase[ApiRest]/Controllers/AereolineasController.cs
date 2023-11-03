@@ -10,9 +10,9 @@ namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
 
-    public class AereolineasController : CrudController<Aereolinea, int, FlyEaseDataBaseContext>
+    public class AereolineasController : CrudController<Aereolinea, int, FlyEaseDataBaseContextPrueba>
     {
-        public AereolineasController(FlyEaseDataBaseContext context) : base(context)
+        public AereolineasController(FlyEaseDataBaseContextPrueba context) : base(context)
         {
             _context = context;
         }
