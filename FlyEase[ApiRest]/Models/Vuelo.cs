@@ -18,7 +18,7 @@ public partial class Vuelo
     public DateTime Fechayhorallegada { get; set; }
 
     [JsonIgnore]
-    public BitArray Cupo { get; set; }
+    public bool Cupo { get; set; }
 
     [JsonIgnore]
     public int? Iddespegue { get; set; }

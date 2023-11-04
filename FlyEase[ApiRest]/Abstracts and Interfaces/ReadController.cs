@@ -47,7 +47,7 @@ where TContext : DbContext, new()
                 {
                     return BadRequest("No se ha encontrado");
                 }
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = false, response = entity });
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, response = entity });
             }
             catch (Exception ex)
             {

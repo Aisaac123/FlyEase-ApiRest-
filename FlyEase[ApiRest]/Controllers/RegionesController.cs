@@ -60,7 +60,7 @@ namespace FlyEase_ApiRest_.Controllers
                 {
             new NpgsqlParameter("id_region", id_region),
             new NpgsqlParameter("nuevo_nombre", nuevaRegion.Nombre),
-                    new NpgsqlParameter("nuevo_id_pais", nuevaRegion.Pais.Nombre)
+                    new NpgsqlParameter("nuevo_id_pais", nuevaRegion.Pais.Idpais)
                 };
 
                 await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_region(@id_region, @nuevo_nombre, @nuevo_id_pais)", parameters);

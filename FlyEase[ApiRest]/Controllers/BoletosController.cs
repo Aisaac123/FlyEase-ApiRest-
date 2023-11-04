@@ -108,10 +108,10 @@ namespace FlyEase_ApiRest_.Controllers
                 .ToListAsync();
 
             // Eliminar repeticiones:
-            list = list.GroupBy(boleto => boleto.Asiento.Idasiento).Select(group => group.First()).ToList();
-            list = list.GroupBy(boleto => boleto.Vuelo.Idvuelo).Select(group => group.First()).ToList();
-            list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Despegue.Idaereopuerto).Select(group => group.First()).ToList();
-            list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Destino.Idaereopuerto).Select(group => group.First()).ToList();
+            //list = list.GroupBy(boleto => boleto.Asiento.Idasiento).Select(group => group.First()).ToList();
+            //list = list.GroupBy(boleto => boleto.Vuelo.Idvuelo).Select(group => group.First()).ToList();
+            //list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Despegue.Idaereopuerto).Select(group => group.First()).ToList();
+            //list = list.GroupBy(boleto => boleto.Vuelo.Aereopuerto_Destino.Idaereopuerto).Select(group => group.First()).ToList();
 
             return list;
         }
@@ -143,7 +143,7 @@ namespace FlyEase_ApiRest_.Controllers
                     .ThenInclude(arg => arg.Coordenadas)
                 .Include(arg => arg.Vuelo)
                     .ThenInclude(arg => arg.Estado)
-         .FirstOrDefaultAsync(a => a.Idasiento == id);
+         .FirstOrDefaultAsync(a => a.Idboleto == id);
 
             return entity;
         }

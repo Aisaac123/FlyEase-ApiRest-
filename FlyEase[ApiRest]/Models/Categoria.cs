@@ -13,7 +13,7 @@ public partial class Categoria
 
     public string Descripcion { get; set; }
 
-    public BitArray Estadocategoria { get; set; }
+    public bool Estadocategoria { get; set; }
 
     public double Tarifa { get; set; }
 
