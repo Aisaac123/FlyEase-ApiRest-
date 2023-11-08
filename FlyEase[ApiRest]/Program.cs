@@ -47,7 +47,6 @@ app.UseEndpoints(endpoints =>
 //}
 app.UseCors(CorsRules);
 
-// Escucha las peticiones del cliente
 app.UseSwagger();
 app.UseSwaggerUI();
 
