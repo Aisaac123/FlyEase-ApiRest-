@@ -2,6 +2,7 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 

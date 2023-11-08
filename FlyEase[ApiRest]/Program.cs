@@ -12,11 +12,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FlyEaseDataBaseContextPrueba>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
+
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
 var CorsRules = "Reglas";
+
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy(name: CorsRules, builder =>
@@ -41,7 +44,7 @@ app.UseCors(CorsRules);
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

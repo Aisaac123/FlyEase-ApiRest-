@@ -10,7 +10,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
     [ApiController]
     public abstract class ReadController<TEntity,IdType, TContext> : Controller, IControllerRead<IdType>
 where TEntity : class
-where TContext : DbContext, new()
+where TContext : DbContext
     {
 
 
@@ -45,7 +45,7 @@ where TContext : DbContext, new()
                 var entity = await SetContextEntity(id);
                 if (entity == null)
                 {
-                    return BadRequest("No se ha encontrado");
+                    return StatusCode(StatusCodes.Status404NotFound);
                 }
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, response = entity });
             }

@@ -79,5 +79,59 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+
+        [HttpGet]
+        [Route("GetBoletosByCliente/{id_cliente}")]
+        public async Task<IActionResult> GetAsiento(string id_cliente)
+        {
+            try
+            {
+                var entity = await _context.Set<Cliente>()
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Avion)
+                    .ThenInclude(arg => arg.Aereolinea)
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Asiento)
+                    .ThenInclude(arg => arg.Categoria)
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Despegue)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Ciudad)
+                    .ThenInclude(arg => arg.Region)
+                    .ThenInclude(arg => arg.Pais)
+                .Include(a => a.Boletos)
+                    .ThenInclude(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Aereopuerto_Destino)
+                    .ThenInclude(arg => arg.Coordenadas)
+                .Include(a => a.Boletos)
+                .ThenInclude(arg => arg.Vuelo)
+                    .ThenInclude(arg => arg.Estado)
+                    .FirstOrDefaultAsync(a => a.Numerodocumento == id_cliente);
+
+                if (entity != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, response = entity.Boletos });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new { mensaje = "Cliente no encontrado", Succes = false, response = new List<Asiento>() });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false, response = new List<Asiento>() });
+            }
+        }
     }
 }

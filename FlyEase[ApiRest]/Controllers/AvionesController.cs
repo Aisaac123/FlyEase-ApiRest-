@@ -2,6 +2,7 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -65,6 +66,7 @@ namespace FlyEase_ApiRest_.Controllers
                 var parameters = new NpgsqlParameter[]
                 {
             new NpgsqlParameter("id_avion", id_avion),
+            new NpgsqlParameter("new_idavion", nuevoAvion.Idavion),
             new NpgsqlParameter("nuevo_nombre", nuevoAvion.Nombre),
             new NpgsqlParameter("nuevo_modelo", nuevoAvion.Modelo),
             new NpgsqlParameter("nuevo_fabricante", nuevoAvion.Fabricante),
@@ -74,7 +76,7 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("nuevo_id_aereolinea", nuevoAvion.Idaereolinea)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_avion(@id_avion, @nuevo_nombre, @nuevo_modelo, @nuevo_fabricante, @nueva_velocidad_promedio, @nueva_cantidad_pasajeros, @nueva_cantidad_carga, @nuevo_id_aereolinea)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_avion(@id_avion, @new_idavion, @nuevo_nombre, @nuevo_modelo, @nuevo_fabricante, @nueva_velocidad_promedio, @nueva_cantidad_pasajeros, @nueva_cantidad_carga, @nuevo_id_aereolinea)", parameters);
                 return "Ok";
             }
             catch (Exception ex)
@@ -98,6 +100,29 @@ namespace FlyEase_ApiRest_.Controllers
          .FirstOrDefaultAsync(a => a.Idavion == id);
 
             return entity;
+        }
+
+        [HttpGet]
+        [Route("GetAsientos/{id_avion}")]
+        public async Task<IActionResult> GetAsiento(string id_avion)
+        {
+            try
+            {
+                var entity = await _context.Set<Avion>().Include(a => a.Asientos).ThenInclude(a => a.Categoria).Include(a => a.Aereolinea).FirstOrDefaultAsync(a => a.Idavion == id_avion);
+
+                if (entity != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, response = entity.Asientos });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new { mensaje = "Avión no encontrado", Succes = false, response = new List<Asiento>() });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false, response = new List<Asiento>() });
+            }
         }
     }
 }
