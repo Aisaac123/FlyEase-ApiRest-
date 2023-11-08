@@ -10,9 +10,11 @@ public partial class Ciudad
 
     public string Nombre { get; set; }
 
+    [JsonIgnore]
     public int? Idregion { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
+    public byte[] Imagen { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Aereopuerto> ListaAereopuertos { get; set; } = new List<Aereopuerto>();

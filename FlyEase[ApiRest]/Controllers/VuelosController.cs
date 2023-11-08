@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using NpgsqlTypes;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -21,23 +20,6 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                NpgsqlParameter v_imagen;
-
-                if (entity.Imagen != null)
-                {
-                    v_imagen = new NpgsqlParameter("v_imagen", NpgsqlDbType.Bytea)
-                    {
-                        Value = entity.Imagen // Valor de la imagen si no es nulo
-                    };
-                }
-                else
-                {
-                    v_imagen = new NpgsqlParameter("v_imagen", NpgsqlDbType.Bytea)
-                    {
-                        Value = DBNull.Value // Valor nulo
-                    };
-                }
-
                 var parameters = new NpgsqlParameter[]
                 {
             new NpgsqlParameter("v_preciovuelo", double.Parse(entity.Preciovuelo.ToString())),
@@ -47,14 +29,8 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("v_iddespegue", entity.Aereopuerto_Despegue.Idaereopuerto),
             new NpgsqlParameter("v_iddestino", entity.Aereopuerto_Destino.Idaereopuerto),
             new NpgsqlParameter("v_idavion", entity.Avion.Idavion),
-            v_imagen
                 };
-                if (v_imagen.Value == DBNull.Value)
-                {
-                    await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion)", parameters);
-                    return "Ok";
-                }
-                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion, @v_imagen)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion)", parameters);
                 return "Ok";
             }
             catch (Exception ex)
@@ -85,22 +61,6 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                NpgsqlParameter v_imagen;
-
-                if (nuevoVuelo.Imagen != null)
-                {
-                    v_imagen = new NpgsqlParameter("v_imagen", NpgsqlDbType.Bytea)
-                    {
-                        Value = nuevoVuelo.Imagen // Valor de la imagen si no es nulo
-                    };
-                }
-                else
-                {
-                    v_imagen = new NpgsqlParameter("v_imagen", NpgsqlDbType.Bytea)
-                    {
-                        Value = DBNull.Value // Valor nulo
-                    };
-                }
                 var parameters = new NpgsqlParameter[]
                 {
             new NpgsqlParameter("id_vuelo", id_vuelo),
@@ -114,16 +74,9 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("nuevo_id_destino", nuevoVuelo.Aereopuerto_Destino.Idaereopuerto),
             new NpgsqlParameter("nuevo_id_estado", nuevoVuelo.Estado.Idestado),
             new NpgsqlParameter("nuevo_id_avion", nuevoVuelo.Avion.Idavion),
-            v_imagen
                 };
-                if (v_imagen.Value == DBNull.Value)
-                {
                     await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_vuelo(@id_vuelo, @nuevo_precio_vuelo, @nueva_tarifatemporada, @nuevo_descuento, @nueva_distancia_recorrida, @nueva_fecha_hora_llegada, @nuevo_cupo, @nuevo_id_despegue, @nuevo_id_destino, @nuevo_id_estado, @nuevo_id_avion)", parameters);
                     return "Ok";
-                }
-
-                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_vuelo(@id_vuelo, @nuevo_precio_vuelo, @nueva_tarifatemporada, @nuevo_descuento, @nueva_distancia_recorrida, @nueva_fecha_hora_llegada, @nuevo_cupo, @nuevo_id_despegue, @nuevo_id_destino, @nuevo_id_estado, @nuevo_id_avion, @nueva_imagen)", parameters);
-                return "Ok";
             }
             catch (Exception ex)
             {

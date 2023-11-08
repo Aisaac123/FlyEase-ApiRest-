@@ -10,6 +10,7 @@ public partial class Region
 
     public string Nombre { get; set; }
 
+    [JsonIgnore]
     public int Idpais { get; set; }
 
     public DateTime? Fecharegistro { get; set; }

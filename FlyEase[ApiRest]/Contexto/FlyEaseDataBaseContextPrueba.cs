@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FlyEase_ApiRest_.Models;
+﻿using FlyEase_ApiRest_.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Contexto;
@@ -44,9 +42,9 @@ public partial class FlyEaseDataBaseContextPrueba : DbContext
 
     public virtual DbSet<Vuelo> Vuelos { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseNpgsql("Host=ep-calm-wood-66281423.us-east-2.aws.neon.fl0.io;Database=FlyEaseDataBase;Username=fl0user;Password=ljIrdn0WacR3");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseNpgsql("Host=ep-calm-wood-66281423.us-east-2.aws.neon.fl0.io;Database=FlyEaseDataBase;Username=fl0user;Password=ljIrdn0WacR3");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -312,6 +310,7 @@ public partial class FlyEaseDataBaseContextPrueba : DbContext
                 .HasForeignKey(d => d.Idregion)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_ciudades_idregion");
+            entity.Property(e => e.Imagen).HasColumnName("imagen");
         });
 
         modelBuilder.Entity<Cliente>(entity =>
@@ -482,7 +481,6 @@ public partial class FlyEaseDataBaseContextPrueba : DbContext
                 .HasForeignKey(d => d.Idestado)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_idestado");
-            entity.Property(e => e.Imagen).HasColumnName("imagen");
         });
 
         OnModelCreatingPartial(modelBuilder);

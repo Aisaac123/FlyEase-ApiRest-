@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -21,14 +22,37 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
+                NpgsqlParameter v_imagen;
+
+                if (entity.Imagen != null)
+                {
+                    v_imagen = new NpgsqlParameter("_imagen", NpgsqlDbType.Bytea)
+                    {
+                        Value = entity.Imagen // Valor de la imagen si no es nulo
+                    };
+                }
+                else
+                {
+                    v_imagen = new NpgsqlParameter("_imagen", NpgsqlDbType.Bytea)
+                    {
+                        Value = DBNull.Value // Valor nulo
+                    };
+                }
+
                 var parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("nombre_ciudad", entity.Nombre),
-            new NpgsqlParameter("nombre_region", entity.Region.Nombre),
-                    new NpgsqlParameter("nombre_pais", entity.Region.Pais.Nombre)
-                };
+                    new NpgsqlParameter("nombre_ciudad", entity.Nombre),
+                    new NpgsqlParameter("nombre_region", entity.Region.Nombre),
+                    new NpgsqlParameter("nombre_pais", entity.Region.Pais.Nombre),
+                    v_imagen
 
-                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_ciudad(@nombre_ciudad, @nombre_region, @nombre_pais)", parameters);
+                };
+                if (v_imagen.Value == DBNull.Value)
+                {
+                    await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_ciudad(@nombre_ciudad, @nombre_region, @nombre_pais)", parameters);
+                    return "Ok";
+                }
+                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_ciudad(@nombre_ciudad, @nombre_region, @nombre_pais, @_imagen)", parameters);
                 return "Ok";
             }
             catch (Exception ex)
@@ -59,14 +83,35 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
+                NpgsqlParameter v_imagen;
+
+                if (nuevaCiudad.Imagen != null)
+                {
+                    v_imagen = new NpgsqlParameter("_imagen", NpgsqlDbType.Bytea)
+                    {
+                        Value = nuevaCiudad.Imagen // Valor de la imagen si no es nulo
+                    };
+                }
+                else
+                {
+                    v_imagen = new NpgsqlParameter("_imagen", NpgsqlDbType.Bytea)
+                    {
+                        Value = DBNull.Value // Valor nulo
+                    };
+                }
                 var parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("id_ciudad", id_ciudad),
-            new NpgsqlParameter("nuevo_nombre", nuevaCiudad.Nombre),
-                    new NpgsqlParameter("nuevo_id_region", nuevaCiudad.Idregion)
+                    new NpgsqlParameter("id_ciudad", id_ciudad),
+                    new NpgsqlParameter("nuevo_nombre", nuevaCiudad.Nombre),
+                    new NpgsqlParameter("nuevo_id_region", nuevaCiudad.Idregion),
+                    v_imagen
                 };
-
-                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_ciudad(@id_ciudad, @nuevo_nombre, @nuevo_id_region)", parameters);
+                if (v_imagen.Value == DBNull.Value)
+                {
+                    await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_ciudad(@id_ciudad, @nuevo_nombre, @nuevo_id_region)", parameters);
+                    return "Ok";
+                }
+                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_ciudad(@id_ciudad, @nuevo_nombre, @nuevo_id_region, @_imagen)", parameters);
                 return "Ok";
             }
             catch (Exception ex)

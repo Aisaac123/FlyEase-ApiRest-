@@ -18,7 +18,6 @@ public partial class Vuelo
     public DateTime Fechayhorallegada { get; set; }
 
     public bool Cupo { get; set; }
-    public byte[] Imagen { get; set; }
 
     [JsonIgnore]
     public int? Iddespegue { get; set; }

@@ -35,6 +35,9 @@ builder.Services.AddSingleton(hub);
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors(CorsRules);
+app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {
@@ -45,14 +48,12 @@ app.UseEndpoints(endpoints =>
 //if (app.Environment.IsDevelopment())
 //{
 //}
-app.UseCors(CorsRules);
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
