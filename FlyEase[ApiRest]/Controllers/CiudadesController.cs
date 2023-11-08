@@ -1,6 +1,8 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.SignalR;
+
 using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -10,7 +12,7 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class CiudadesController : CrudController<Ciudad, int, FlyEaseDataBaseContextPrueba>
     {
-        public CiudadesController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public CiudadesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

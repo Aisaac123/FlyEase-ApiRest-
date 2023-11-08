@@ -2,7 +2,7 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -11,7 +11,7 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class BoletosController : CrudController<Boleto, int, FlyEaseDataBaseContextPrueba>
     {
-        public BoletosController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public BoletosController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
@@ -87,7 +87,7 @@ namespace FlyEase_ApiRest_.Controllers
                     .ThenInclude(arg => arg.Avion)
                     .ThenInclude(arg => arg.Aereolinea)
                 .Include(arg => arg.Asiento)
-                    .ThenInclude(arg => arg.Categoria) 
+                    .ThenInclude(arg => arg.Categoria)
                 .Include(arg => arg.Vuelo)
                     .ThenInclude(arg => arg.Aereopuerto_Despegue)
                     .ThenInclude(arg => arg.Ciudad)
@@ -125,7 +125,7 @@ namespace FlyEase_ApiRest_.Controllers
                     .ThenInclude(arg => arg.Avion)
                     .ThenInclude(arg => arg.Aereolinea)
                 .Include(arg => arg.Asiento)
-                    .ThenInclude(arg => arg.Categoria) 
+                    .ThenInclude(arg => arg.Categoria)
                 .Include(arg => arg.Vuelo)
                     .ThenInclude(arg => arg.Aereopuerto_Despegue)
                     .ThenInclude(arg => arg.Ciudad)

@@ -2,6 +2,7 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -11,7 +12,7 @@ namespace FlyEase_ApiRest_.Controllers
 
     public class AsientosController : CrudController<Asiento, int, FlyEaseDataBaseContextPrueba>
     {
-        public AsientosController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public AsientosController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

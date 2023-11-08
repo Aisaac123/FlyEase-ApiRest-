@@ -1,6 +1,8 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.SignalR;
+
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextPrueba>
     {
-        public ClientesController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public ClientesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

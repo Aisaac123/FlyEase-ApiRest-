@@ -2,6 +2,7 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -10,7 +11,7 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class RegionesController : CrudController<Region, int, FlyEaseDataBaseContextPrueba>
     {
-        public RegionesController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public RegionesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

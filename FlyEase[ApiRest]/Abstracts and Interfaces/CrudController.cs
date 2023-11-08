@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
     [EnableCors("Reglas")]
-
-    public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext> where TEntity : class where TContext : DbContext, new()
+    [Route("FlyEaseApi/[controller]")]
+    [ApiController]
+    public abstract class CrudController<TEntity, IdType, TContext> : ReadController<TEntity, IdType, TContext>
+        where TEntity : class
+        where TContext : DbContext, new()
     {
+        private readonly IHubContext<WebSocketHub> _hubContext;
 
-        protected CrudController(TContext context) : base(context)
+        protected CrudController(TContext context, IHubContext<WebSocketHub> hubContext) : base(context)
         {
-            _context = context;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -24,9 +29,13 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 if (mensaje == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Success = true, response = entity });
+
+                    // Notificar a los clientes sobre la actualización
+                    await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha insertado en la base de datos");
+
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true, response = entity });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Success = false });
+                return StatusCode(StatusCodes.Status409Conflict, new { mensaje = mensaje, Success = false });
             }
             catch (Exception ex)
             {
@@ -44,9 +53,13 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 if (mensaje.ToString() == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Success = true, response = entity });
+
+                    // Notificar a los clientes sobre la actualización
+                    await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha actualizado en la base de datos");
+
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true, response = entity });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Success = false });
+                return StatusCode(StatusCodes.Status409Conflict, new { mensaje = mensaje, Success = false });
             }
             catch (Exception ex)
             {
@@ -60,19 +73,21 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         {
             try
             {
-
-
                 var mensaje = await DeleteProcedure(Id);
                 if (mensaje.ToString() == "Ok")
                 {
                     await _context.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operacion Realizada con Exito", Succes = true });
+
+                    // Notificar a los clientes sobre la actualización
+                    await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha eliminado en la base de datos");
+
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true });
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = mensaje, Succes = false });
+                return StatusCode(StatusCodes.Status409Conflict, new { mensaje = mensaje, Success = false });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Success = false });
             }
         }
 
@@ -85,11 +100,15 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 var entities = await _context.Set<TEntity>().ToListAsync();
                 _context.Set<TEntity>().RemoveRange(entities);
                 _context.SaveChanges();
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Ok", Succes = true });
+
+                // Notificar a los clientes sobre la actualización
+                await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha elimininado en la base de datos");
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Ok", Success = true });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Success = false });
             }
         }
 

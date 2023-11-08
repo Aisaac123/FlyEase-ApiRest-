@@ -27,20 +27,27 @@ builder.Services.AddCors(opt =>
         builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
+builder.Services.AddSignalR();
+var hub = new WebSocketHub();
 
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("WebAccess", policy => policy.RequireRole("UsuarioWeb"));
-//    options.AddPolicy("ManagerAccess", policy => policy.RequireRole("UsuarioEscritorio"));
-//});
+
+builder.Services.AddSingleton(hub);
 var app = builder.Build();
 
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<WebSocketHub>("/FlyEaseHub");
+    endpoints.MapControllers();
+});
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
 //}
 app.UseCors(CorsRules);
 
+// Escucha las peticiones del cliente
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -49,5 +56,4 @@ app.UseSwaggerUI();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

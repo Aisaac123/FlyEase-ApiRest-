@@ -3,6 +3,7 @@ using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -11,7 +12,7 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContextPrueba>
     {
-        public AvionesController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public AvionesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

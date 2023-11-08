@@ -3,6 +3,7 @@ using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -12,7 +13,7 @@ namespace FlyEase_ApiRest_.Controllers
 
     public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContextPrueba>
     {
-        public CategoriasController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public CategoriasController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
