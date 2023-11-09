@@ -103,7 +103,7 @@ namespace FlyEase_ApiRest_.Controllers
                 {
                     new NpgsqlParameter("id_ciudad", id_ciudad),
                     new NpgsqlParameter("nuevo_nombre", nuevaCiudad.Nombre),
-                    new NpgsqlParameter("nuevo_id_region", nuevaCiudad.Idregion),
+                    new NpgsqlParameter("nuevo_id_region", nuevaCiudad.Region.Idregion),
                     v_imagen
                 };
                 if (v_imagen.Value == DBNull.Value)
