@@ -1,5 +1,4 @@
-﻿using FlyEase_ApiRest_.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {

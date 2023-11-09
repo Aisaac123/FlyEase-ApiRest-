@@ -14,6 +14,7 @@ public partial class Boleto
 
     public double? Preciototal { get; set; }
 
+    [JsonIgnore]
     public string Numerodocumento { get; set; }
 
     [JsonIgnore]
