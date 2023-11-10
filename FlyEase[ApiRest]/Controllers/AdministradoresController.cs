@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextPrueba>
+    public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextAuthentication>
     {
         private readonly IAuthentication _aut;
-        public AdministradoresController(FlyEaseDataBaseContextPrueba context, IAuthentication aut) : base(context)
+        public AdministradoresController(FlyEaseDataBaseContextAuthentication context, IAuthentication aut) : base(context)
         {
             _context = context;
             _aut = aut;
@@ -45,7 +45,7 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                var Aut = await _aut.Authentication(admin);
+                var Aut = await _aut.TokenAuthorization(admin);
                 if (!Aut.Succes)
                 {
                     return StatusCode(StatusCodes.Status401Unauthorized, new { response = Aut });

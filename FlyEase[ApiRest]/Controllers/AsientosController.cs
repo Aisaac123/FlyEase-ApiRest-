@@ -10,9 +10,9 @@ namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
 
-    public class AsientosController : CrudController<Asiento, int, FlyEaseDataBaseContextPrueba>
+    public class AsientosController : CrudController<Asiento, int, FlyEaseDataBaseContextAuthentication>
     {
-        public AsientosController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
+        public AsientosController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

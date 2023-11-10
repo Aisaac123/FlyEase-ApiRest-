@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Cors;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class EstadosController : ReadController<Estado, int, FlyEaseDataBaseContextPrueba>
+    public class EstadosController : ReadController<Estado, int, FlyEaseDataBaseContextAuthentication>
     {
-        public EstadosController(FlyEaseDataBaseContextPrueba context) : base(context)
+        public EstadosController(FlyEaseDataBaseContextAuthentication context) : base(context)
         {
             _context = context;
         }

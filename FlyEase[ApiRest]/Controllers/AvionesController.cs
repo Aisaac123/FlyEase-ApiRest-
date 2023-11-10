@@ -10,9 +10,9 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContextPrueba>
+    public class AvionesController : CrudController<Avion, string, FlyEaseDataBaseContextAuthentication>
     {
-        public AvionesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
+        public AvionesController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

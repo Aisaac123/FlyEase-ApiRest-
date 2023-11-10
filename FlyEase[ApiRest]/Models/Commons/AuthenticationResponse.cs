@@ -1,4 +1,4 @@
-﻿namespace FlyEase_ApiRest_.Models
+﻿namespace FlyEase_ApiRest_.Models.Commons
 {
     public class AuthenticationResponse
     {

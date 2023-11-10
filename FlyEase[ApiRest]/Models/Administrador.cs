@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using FlyEase_ApiRest_.Models.Commons;
+using System.Collections;
+using System.Text.Json.Serialization;
 
 namespace FlyEase_ApiRest_.Models;
 
@@ -25,4 +27,7 @@ public partial class Administrador
     public string Clave { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<Refreshtoken> Refreshtokens { get; set; } = new List<Refreshtoken>();
 }

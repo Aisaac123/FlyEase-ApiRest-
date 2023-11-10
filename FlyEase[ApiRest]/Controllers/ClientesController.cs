@@ -11,9 +11,9 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
-    public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextPrueba>
+    public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextAuthentication>
     {
-        public ClientesController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
+        public ClientesController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

@@ -8,9 +8,9 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
 
-    public class AereolineasController : CrudController<Aereolinea, int, FlyEaseDataBaseContextPrueba>
+    public class AereolineasController : CrudController<Aereolinea, int, FlyEaseDataBaseContextAuthentication>
     {
-        public AereolineasController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
+        public AereolineasController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }

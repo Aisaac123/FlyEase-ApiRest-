@@ -1,46 +1,54 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using FlyEase_ApiRest_.Models.Commons;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace FlyEase_ApiRest_.Authentication
 {
     public class AuthenticationService : IAuthentication
     {
-        private readonly FlyEaseDataBaseContextPrueba _context;
+        private readonly FlyEaseDataBaseContextAuthentication _context;
         private readonly IConfiguration _config;
-        public AuthenticationService(FlyEaseDataBaseContextPrueba context, IConfiguration config)
+        public AuthenticationService(FlyEaseDataBaseContextAuthentication context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
-        public async Task<AuthenticationResponse> Authentication([FromBody] Administrador admin = null)
+
+        public Task<AuthenticationResponse> RefreshTokenAuthorization(int idusuario, RefreshTokenRequest refreshtoken = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<AuthenticationResponse> TokenAuthorization([FromBody] Administrador admin = null)
         {
             try
             {
-                if (admin == null) 
+                if (admin == null)
                 {
-                    var token = GenerateKeyBytes();
+                    var token = GenerateToken();
 
-                    return new AuthenticationResponse() { Msg = "Usuario Valido", Succes = true, Token = { IsAdmin = false, Token = token } };
+                    return new AuthenticationResponse() { Msg = "Usuario Valido", Succes = true, Token = { AdminAuthentication = false, Token = token } };
                 }
                 var AdminExist = await _context.Administradores
          .AnyAsync(a => a.Usuario == admin.Usuario && admin.Clave == a.Clave);
                 if (!AdminExist)
                 {
-                    var token = GenerateKeyBytes();
+                    var token = GenerateToken();
 
-                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Token = { IsAdmin = false, Token = "" } };
+                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Token = { AdminAuthentication = false, Token = "" } };
                 }
                 else
                 {
-                    var token = GenerateKeyBytes(admin.Usuario);
-                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Token = { IsAdmin = true, Token = token} };
+                    var token = GenerateToken(admin.Usuario);
+                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Token = { AdminAuthentication = true, Token = token } };
                 }
 
             }
@@ -49,7 +57,7 @@ namespace FlyEase_ApiRest_.Authentication
                 return new AuthenticationResponse() { Msg = ex.Message, Succes = false, Token = null };
             }
         }
-        private string GenerateKeyBytes(string Identifier = null)
+        private string GenerateToken(string Identifier = null)
         {
             var claims = new ClaimsIdentity();
             string stringkey;
@@ -76,6 +84,33 @@ namespace FlyEase_ApiRest_.Authentication
 
             string tokencreado = tokenHandler.WriteToken(tokenConfig);
             return tokencreado;
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var byteArray = new byte[64];
+            var refreshToken = "";
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(byteArray);
+                refreshToken = Convert.ToBase64String(byteArray);
+            }
+            return refreshToken;
+        }
+        private async Task<AuthenticationResponse> SaveRefreshToken(int idUsuario,string token,string refreshToken
+)
+        {
+            var RefreshToken = new Refreshtoken
+            {
+                IdUser = idUsuario,
+                Token = token,
+                RefreshtokenAtributte = refreshToken,
+                Fechacreacion = DateTime.UtcNow,
+                Fechaexpiracion = DateTime.UtcNow.AddMinutes(2)
+            };
+            await _context.Refreshtokens.AddAsync(RefreshToken);
+            await _context.SaveChangesAsync();
+            return new AuthenticationResponse { Token = new TokenClass { Token = token, RefreshToken = refreshToken, AdminAuthentication = true}, Succes = true, Msg = "Ok" };
         }
     }
 }

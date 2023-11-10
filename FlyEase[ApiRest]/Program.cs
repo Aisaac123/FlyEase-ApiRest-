@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Authentication;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var CorsRules = "Reglas";
@@ -30,7 +31,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FlyEaseDataBaseContextPrueba>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
+builder.Services.AddDbContext<FlyEaseDataBaseContextAuthentication>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
 
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
@@ -56,10 +57,32 @@ builder.Services.AddAuthentication(config =>
         IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ValidateLifetime = false,
-        ClockSkew = TimeSpan.Zero
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        RoleClaimType = ClaimTypes.Role // Asegura que las reclamaciones de roles se manejen correctamente
+    };
+    config.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            // Verifica si el usuario es un administrador
+            var isAdmin = context.Principal.IsInRole("Admin");
+
+            if (isAdmin)
+            {
+                var expirationClaim = context.Principal.FindFirst("exp");
+                if (expirationClaim != null)
+                {
+                    var newExpiration = DateTime.UtcNow.AddSeconds(3); // 3 minutos para caducar
+                    context.Principal.AddIdentity(new ClaimsIdentity(new Claim[] { new Claim("exp", newExpiration.ToString("yyyy-MM-ddTHH:mm:ssZ")) }));
+                }
+            }
+
+            return Task.CompletedTask;
+        }
     };
 });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));

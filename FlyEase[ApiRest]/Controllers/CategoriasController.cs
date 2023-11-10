@@ -11,9 +11,9 @@ namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
 
-    public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContextPrueba>
+    public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContextAuthentication>
     {
-        public CategoriasController(FlyEaseDataBaseContextPrueba context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
+        public CategoriasController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
