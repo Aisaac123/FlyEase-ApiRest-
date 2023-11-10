@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpPost]
         [Route("Post")]
+        [Authorize]
+
         public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             try
@@ -45,6 +48,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpPut]
         [Route("Put/{Id}")]
+        [Authorize]
+
         public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
             try
@@ -69,6 +74,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpDelete]
         [Route("Delete/{Id}")]
+        [Authorize]
+
         public virtual async Task<IActionResult> Delete(IdType Id)
         {
             try
@@ -93,6 +100,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpDelete]
         [Route("DeleteAll")]
+        [Authorize]
+
         public virtual async Task<IActionResult> DeleteAll()
         {
             try

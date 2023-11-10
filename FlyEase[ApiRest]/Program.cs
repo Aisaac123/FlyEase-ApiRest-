@@ -1,8 +1,27 @@
 using FlyEase_ApiRest_.Contexto;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using FlyEase_ApiRest_.Abstracts_and_Interfaces;
+using FlyEase_ApiRest_.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
+var CorsRules = "Reglas";
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(name: CorsRules, builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
+
+builder.Configuration.AddJsonFile("appsettings.json");
 
 // Add services to the container.
 
@@ -18,14 +37,33 @@ builder.Services.AddControllers().AddJsonOptions(c =>
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-var CorsRules = "Reglas";
+builder.Services.AddScoped<IAuthentication, AuthenticationService>();
 
-builder.Services.AddCors(opt =>
+var secretkey = builder.Configuration.GetSection("settings").GetSection("secretkey").ToString();
+var keyBytes = Encoding.UTF8.GetBytes("FlyEaseWebApiTokenEncryptedKeyForAdmin");
+
+builder.Services.AddAuthentication(config =>
 {
-    opt.AddPolicy(name: CorsRules, builder =>
+    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(config =>
+{
+    config.RequireHttpsMetadata = false;
+    config.SaveToken = true;
+    config.TokenValidationParameters = new TokenValidationParameters
     {
-        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("CommonUser"));
 });
 builder.Services.AddSignalR();
 var hub = new WebSocketHub();
@@ -36,6 +74,8 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseCors(CorsRules);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 

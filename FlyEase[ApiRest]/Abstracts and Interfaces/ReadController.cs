@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
@@ -22,6 +23,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Get()
         {
             List<TEntity> lista = new();
@@ -38,6 +40,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpGet]
         [Route("GetById/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(IdType id)
         {
             try

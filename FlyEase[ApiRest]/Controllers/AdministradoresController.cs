@@ -10,9 +10,11 @@ namespace FlyEase_ApiRest_.Controllers
     [EnableCors("Reglas")]
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextPrueba>
     {
-        public AdministradoresController(FlyEaseDataBaseContextPrueba context) : base(context)
+        private readonly IAuthentication _aut;
+        public AdministradoresController(FlyEaseDataBaseContextPrueba context, IAuthentication aut) : base(context)
         {
             _context = context;
+            _aut = aut;
         }
 
         [HttpGet]
@@ -29,6 +31,27 @@ namespace FlyEase_ApiRest_.Controllers
                 }
 
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = Admin });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
+
+        [HttpPost]
+        [Route("Authentication")]
+        public async Task<IActionResult> Authentication(Administrador admin)
+        {
+            try
+            {
+                var Aut = await _aut.Authentication(admin);
+                if (!Aut.Succes)
+                {
+                    return StatusCode(StatusCodes.Status401Unauthorized, new { response = Aut });
+
+                }
+                return StatusCode(StatusCodes.Status200OK, new { response = Aut });
             }
             catch (Exception ex)
             {
