@@ -46,7 +46,7 @@ namespace FlyEase_ApiRest_.Controllers
         [HttpPost]
         [Route("Authentication")]
 
-        public async Task<IActionResult> Authentication(Administrador admin)
+        public async Task<IActionResult> Authentication([FromBody] Administrador admin)
         {
             try
             {

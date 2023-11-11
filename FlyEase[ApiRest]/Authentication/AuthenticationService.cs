@@ -55,7 +55,7 @@ namespace FlyEase_ApiRest_.Authentication
                 }
                 else
                 {
-                    admin = await _context.Administradores.FindAsync(admin.Usuario);
+                    admin = await _context.Administradores.FirstOrDefaultAsync(a => a.Usuario == admin.Usuario);
                     var token = GenerateToken(admin.Idadministrador.ToString());
                     var refreshtoken = GenerateRefreshToken();
                     await SaveRefreshToken(admin.Idadministrador, token, refreshtoken);
