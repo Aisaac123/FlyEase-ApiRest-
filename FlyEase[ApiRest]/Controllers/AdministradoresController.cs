@@ -22,7 +22,7 @@ namespace FlyEase_ApiRest_.Controllers
         }
         [HttpGet]
         [Route("GetByUsername/{AdminUsername}")]
-        [Authorize(Policy = "AdminPolicy")]
+       // [Authorize(Policy = "AdminPolicy")]
 
         public async Task<IActionResult> GetByUsername(string AdminUsername)
         {

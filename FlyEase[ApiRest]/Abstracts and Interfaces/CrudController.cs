@@ -22,7 +22,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpPost]
         [Route("Post")]
-        [Authorize]
+       // [Authorize]
 
         public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
@@ -48,7 +48,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpPut]
         [Route("Put/{Id}")]
-        [Authorize]
+    //    [Authorize]
 
         public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
@@ -74,7 +74,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpDelete]
         [Route("Delete/{Id}")]
-        [Authorize]
+     //   [Authorize]
 
         public virtual async Task<IActionResult> Delete(IdType Id)
         {
@@ -100,7 +100,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpDelete]
         [Route("DeleteAll")]
-        [Authorize]
+     //   [Authorize]
 
         public virtual async Task<IActionResult> DeleteAll()
         {
