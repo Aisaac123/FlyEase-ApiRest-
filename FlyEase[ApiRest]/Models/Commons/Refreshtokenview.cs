@@ -13,9 +13,9 @@ public partial class Refreshtokenview
 
     public string Refreshtoken { get; set; }
 
-    public DateTime? Fechacreacion { get; set; }
+    public DateTimeOffset? Fechacreacion { get; set; }
 
-    public DateTime? Fechaexpiracion { get; set; }
+    public DateTimeOffset? Fechaexpiracion { get; set; }
 
     public bool? Esactivo { get; set; }
 

@@ -20,7 +20,7 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                var Aut = await _aut.TokenAuthorization();
+                var Aut = await _aut.GetToken();
                 if (!Aut.Succes)
                 {
                     return StatusCode(StatusCodes.Status401Unauthorized, new { response = Aut });

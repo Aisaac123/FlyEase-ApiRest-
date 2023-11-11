@@ -16,18 +16,28 @@ namespace FlyEase_ApiRest_.Authentication
     {
         private readonly FlyEaseDataBaseContextAuthentication _context;
         private readonly IConfiguration _config;
+
         public AuthenticationService(FlyEaseDataBaseContextAuthentication context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
 
-        public Task<AuthenticationResponse> RefreshTokenAuthorization(int idusuario, RefreshTokenRequest refreshtoken = null)
+        public async Task<AuthenticationResponse> GetRefreshToken(int idusuario, RefreshTokenRequest refreshtoken = null)
         {
-            throw new NotImplementedException();
+            var refreshTokenEncontrado = _context.Refreshtokens.FirstOrDefault(x =>
+                x.Token == refreshtoken.ExpiredToken &&
+                x.RefreshtokenAtributte == refreshtoken.RefreshToken &&
+                x.IdUser == idusuario);
+
+            if (refreshTokenEncontrado == null) return new AuthenticationResponse() { Succes = false, Msg = "No existe refresh Token" };
+
+            var refreshTokenCreado = GenerateRefreshToken();
+            var tokenCreado = GenerateToken(idusuario.ToString());
+            return await SaveRefreshToken(idusuario, tokenCreado, refreshTokenCreado);
         }
 
-        public async Task<AuthenticationResponse> TokenAuthorization([FromBody] Administrador admin = null)
+        public async Task<AuthenticationResponse> GetToken([FromBody] Administrador admin = null)
         {
             try
             {
@@ -41,42 +51,46 @@ namespace FlyEase_ApiRest_.Authentication
          .AnyAsync(a => a.Usuario == admin.Usuario && admin.Clave == a.Clave);
                 if (!AdminExist)
                 {
-                    var token = GenerateToken();
-
-                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Token = { AdminAuthentication = false, Token = "" } };
+                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Token = { AdminAuthentication = false, Token = null, RefreshToken = null } };
                 }
                 else
                 {
-                    var token = GenerateToken(admin.Usuario);
-                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Token = { AdminAuthentication = true, Token = token } };
+                    admin = await _context.Administradores.FindAsync(admin.Usuario);
+                    var token = GenerateToken(admin.Idadministrador.ToString());
+                    var refreshtoken = GenerateRefreshToken();
+                    await SaveRefreshToken(admin.Idadministrador, token, refreshtoken);
+                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Token = { AdminAuthentication = true, Token = token, RefreshToken = refreshtoken } };
                 }
-
             }
             catch (Exception ex)
             {
                 return new AuthenticationResponse() { Msg = ex.Message, Succes = false, Token = null };
             }
         }
+
         private string GenerateToken(string Identifier = null)
         {
             var claims = new ClaimsIdentity();
+            DateTime? dateTime;
             string stringkey;
             if (Identifier == null)
             {
                 claims.AddClaim(new Claim(ClaimTypes.Role, "CommonUser"));
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, "User"));
+                dateTime = DateTime.MaxValue;
             }
             else
             {
                 claims.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, Identifier));
+                dateTime = DateTime.UtcNow.AddSeconds(25);
             }
-            stringkey = "FlyEaseWebApiTokenEncryptedKeyForAdmin";
+            stringkey = "FlyEaseWebApiTokenEncryptedKeyString";
             var keyBytes = Encoding.ASCII.GetBytes(stringkey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claims,
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = dateTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -97,20 +111,20 @@ namespace FlyEase_ApiRest_.Authentication
             }
             return refreshToken;
         }
-        private async Task<AuthenticationResponse> SaveRefreshToken(int idUsuario,string token,string refreshToken
-)
+
+        private async Task<AuthenticationResponse> SaveRefreshToken(int idAdmin, string token, string refreshToken)
         {
             var RefreshToken = new Refreshtoken
             {
-                IdUser = idUsuario,
+                IdUser = idAdmin,
                 Token = token,
                 RefreshtokenAtributte = refreshToken,
                 Fechacreacion = DateTime.UtcNow,
-                Fechaexpiracion = DateTime.UtcNow.AddMinutes(2)
+                Fechaexpiracion = DateTime.UtcNow.AddDays(7)
             };
             await _context.Refreshtokens.AddAsync(RefreshToken);
             await _context.SaveChangesAsync();
-            return new AuthenticationResponse { Token = new TokenClass { Token = token, RefreshToken = refreshToken, AdminAuthentication = true}, Succes = true, Msg = "Ok" };
+            return new AuthenticationResponse { Token = new TokenClass { Token = token, RefreshToken = refreshToken, AdminAuthentication = true }, Succes = true, Msg = "Ok" };
         }
     }
 }

@@ -13,9 +13,9 @@ public partial class Refreshtoken
 
     public string RefreshtokenAtributte { get; set; }
 
-    public DateTime? Fechacreacion { get; set; } = DateTime.Now;
+    public DateTimeOffset? Fechacreacion { get; set; } = DateTime.Now;
 
-    public DateTime? Fechaexpiracion { get; set; }
+    public DateTimeOffset? Fechaexpiracion { get; set; }
 
     public DateTime? Fecharegistro { get; set; } = DateTime.Now;
 

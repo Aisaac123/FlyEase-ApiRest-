@@ -414,10 +414,10 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
 
             entity.Property(e => e.Idtoken).HasColumnName("idtoken");
             entity.Property(e => e.Fechacreacion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("fechacreacion");
             entity.Property(e => e.Fechaexpiracion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("fechaexpiracion");
             entity.Property(e => e.Fecharegistro)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -444,10 +444,10 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
 
             entity.Property(e => e.Esactivo).HasColumnName("esactivo");
             entity.Property(e => e.Fechacreacion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("fechacreacion");
             entity.Property(e => e.Fechaexpiracion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("fechaexpiracion");
             entity.Property(e => e.Fecharegistro)
                 .HasColumnType("timestamp without time zone")

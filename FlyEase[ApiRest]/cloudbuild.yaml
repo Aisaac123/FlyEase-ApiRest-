@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if gsutil ls -b gs://staging.flyease.appspot.com; then
+          echo "Bucket exists, no need to create."
+        else
+          gsutil mb -p flyease -c REGIONAL -l us-west3 gs://staging.flyease.appspot.com
+        fi
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy']
+    timeout: '1600s'

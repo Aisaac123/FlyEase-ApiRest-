@@ -5,8 +5,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
     public interface IAuthentication
     {
-        Task<AuthenticationResponse> TokenAuthorization(Administrador admin = null);
-        Task<AuthenticationResponse> RefreshTokenAuthorization(int idusuario, RefreshTokenRequest refreshtoken = null);
+        Task<AuthenticationResponse> GetToken(Administrador admin = null);
+        Task<AuthenticationResponse> GetRefreshToken(int idusuario, RefreshTokenRequest refreshtoken = null);
 
     }
 }
