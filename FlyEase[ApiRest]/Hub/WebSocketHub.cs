@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Npgsql;
 
 public class WebSocketHub : Hub
 {
@@ -20,9 +21,5 @@ public class WebSocketHub : Hub
         await Clients.All.SendAsync("UsuarioDesconectado", connectionId);
 
         await base.OnDisconnectedAsync(exception);
-    }
-    public async Task EnviarMensaje(string connectionId, string mensaje)
-    {
-        await Clients.Client(connectionId).SendAsync("MensajeRecibido", mensaje);
     }
 }

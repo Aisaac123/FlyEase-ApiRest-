@@ -27,11 +27,8 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                var connection = new NpgsqlConnection(_context.Database.GetConnectionString());
-
-               await connection.OpenAsync();
-
-                // Ejecutamos la consulta SQL
+                var connection = _context.Database.GetDbConnection() as NpgsqlConnection;
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT desencriptar_cliente(@client_encryptId)", connection);
                 command.Parameters.AddWithValue("@client_encryptId", Client_ID);
                 var clientId = (string)command.ExecuteScalar();
