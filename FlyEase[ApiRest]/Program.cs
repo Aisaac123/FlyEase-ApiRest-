@@ -22,13 +22,13 @@ builder.Services.AddCors(opt =>
 });
 
 builder.Configuration.AddJsonFile("appsettings.json");
+builder.Services.AddDbContext<FlyEaseDataBaseContextAuthentication>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FlyEaseDataBaseContextAuthentication>(con => con.UseNpgsql(builder.Configuration.GetConnectionString("Fl0ServerConnection")));
 
 builder.Services.AddControllers().AddJsonOptions(c =>
 {
