@@ -1,5 +1,4 @@
-﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
-using FlyEase_ApiRest_.Contexto;
+﻿using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using FlyEase_ApiRest_.Models.Commons;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +11,12 @@ using System.Text;
 
 namespace FlyEase_ApiRest_.Authentication
 {
-    public class AuthenticationService : IAuthentication
+    public class AuthenticationTokenService : IAuthentication
     {
         private readonly FlyEaseDataBaseContextAuthentication _context;
         private readonly IConfiguration _config;
 
-        public AuthenticationService(FlyEaseDataBaseContextAuthentication context, IConfiguration config)
+        public AuthenticationTokenService(FlyEaseDataBaseContextAuthentication context, IConfiguration config)
         {
             _context = context;
             _config = config;
@@ -43,15 +42,16 @@ namespace FlyEase_ApiRest_.Authentication
             {
                 if (admin == null)
                 {
+                    
                     var token = GenerateToken();
 
-                    return new AuthenticationResponse() { Msg = "Usuario Valido", Succes = true, Token = { AdminAuthentication = false, Token = token } };
+                    return new AuthenticationResponse() { Msg = "Cliente Valido", Succes = true, Tokens = { AdminAuthentication = false, PrimaryToken = token } };
                 }
                 var AdminExist = await _context.Administradores
          .AnyAsync(a => a.Usuario == admin.Usuario && admin.Clave == a.Clave);
                 if (!AdminExist)
                 {
-                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Token = { AdminAuthentication = false, Token = null, RefreshToken = null } };
+                    return new AuthenticationResponse() { Msg = "No encontrado", Succes = false, Tokens = { AdminAuthentication = false, PrimaryToken = null, RefreshToken = null } };
                 }
                 else
                 {
@@ -59,12 +59,12 @@ namespace FlyEase_ApiRest_.Authentication
                     var token = GenerateToken(admin.Idadministrador.ToString());
                     var refreshtoken = GenerateRefreshToken();
                     await SaveRefreshToken(admin.Idadministrador, token, refreshtoken);
-                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Token = { AdminAuthentication = true, Token = token, RefreshToken = refreshtoken } };
+                    return new AuthenticationResponse() { Msg = "Administrador Valido", Succes = true, Tokens = { AdminAuthentication = true, PrimaryToken = token, RefreshToken = refreshtoken } };
                 }
             }
             catch (Exception ex)
             {
-                return new AuthenticationResponse() { Msg = ex.Message, Succes = false, Token = null };
+                return new AuthenticationResponse() { Msg = ex.Message, Succes = false, Tokens = null };
             }
         }
 
@@ -83,7 +83,7 @@ namespace FlyEase_ApiRest_.Authentication
             {
                 claims.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, Identifier));
-                dateTime = DateTime.UtcNow.AddSeconds(25);
+                dateTime = DateTime.UtcNow.AddMinutes(5);
             }
             stringkey = "FlyEaseWebApiTokenEncryptedKeyString";
             var keyBytes = Encoding.ASCII.GetBytes(stringkey);
@@ -124,7 +124,7 @@ namespace FlyEase_ApiRest_.Authentication
             };
             await _context.Refreshtokens.AddAsync(RefreshToken);
             await _context.SaveChangesAsync();
-            return new AuthenticationResponse { Token = new TokenClass { Token = token, RefreshToken = refreshToken, AdminAuthentication = true }, Succes = true, Msg = "Ok" };
+            return new AuthenticationResponse { Tokens = new TokenClass { PrimaryToken = token, RefreshToken = refreshToken, AdminAuthentication = true }, Succes = true, Msg = "Ok" };
         }
     }
 }

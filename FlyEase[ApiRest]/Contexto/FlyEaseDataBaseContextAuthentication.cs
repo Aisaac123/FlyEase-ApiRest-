@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FlyEase_ApiRest_.Models;
+﻿using FlyEase_ApiRest_.Models;
 using FlyEase_ApiRest_.Models.Commons;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +20,8 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
     public virtual DbSet<Aereolinea> Aereolineas { get; set; }
 
     public virtual DbSet<Aereopuerto> Aereopuertos { get; set; }
+
+    public virtual DbSet<ApiClient> ApiClients { get; set; }
 
     public virtual DbSet<Asiento> Asientos { get; set; }
 
@@ -46,6 +46,8 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
     public virtual DbSet<Refreshtokenview> Refreshtokenviews { get; set; }
 
     public virtual DbSet<Region> Regiones { get; set; }
+
+    public virtual DbSet<TiposDeAplicacion> TiposDeAplicaciones { get; set; }
 
     public virtual DbSet<Vuelo> Vuelos { get; set; }
 
@@ -161,6 +163,39 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
                 .HasForeignKey<Aereopuerto>(d => d.Idcoordenada)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_aereopuertos_idcoordenada");
+        });
+
+        modelBuilder.Entity<ApiClient>(entity =>
+        {
+            entity.HasKey(e => e.Clientid).HasName("API Clients_pkey");
+
+            entity.ToTable("API Clients");
+
+            entity.HasIndex(e => e.Nombre, "API Clients_nombre_key").IsUnique();
+
+            entity.Property(e => e.Clientid)
+                .HasMaxLength(50)
+                .HasColumnName("clientid");
+            entity.Property(e => e.Activo).HasColumnName("activo");
+            entity.Property(e => e.FechaRegistro)
+                .HasDefaultValueSql("(now() - '05:00:00'::interval)")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecha_registro");
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("nombre");
+            entity.Property(e => e.TipoAplicacionId).HasColumnName("tipo_aplicacion_id");
+            entity.Property(e => e.Token)
+                .HasMaxLength(500)
+                .HasColumnName("token");
+            entity.Property(e => e.Url)
+                .HasMaxLength(255)
+                .HasColumnName("url");
+
+            entity.HasOne(d => d.TipoAplicacion).WithMany(p => p.ApiClients)
+                .HasForeignKey(d => d.TipoAplicacionId)
+                .HasConstraintName("API Clients_tipo_aplicacion_id_fkey");
         });
 
         modelBuilder.Entity<Asiento>(entity =>
@@ -484,6 +519,24 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
             entity.HasOne(d => d.Pais).WithMany(p => p.Regiones)
                 .HasForeignKey(d => d.Idpais)
                 .HasConstraintName("fk_regiones_idpais");
+        });
+
+        modelBuilder.Entity<TiposDeAplicacion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Tipos de aplicaciones_pkey");
+
+            entity.ToTable("Tipos de aplicaciones");
+
+            entity.HasIndex(e => e.Nombre, "Tipos de aplicaciones_nombre_key").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(350)
+                .HasColumnName("descripcion");
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(150)
+                .HasColumnName("nombre");
         });
 
         modelBuilder.Entity<Vuelo>(entity =>

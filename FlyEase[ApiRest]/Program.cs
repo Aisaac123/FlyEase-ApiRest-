@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Authentication;
 using System.Security.Claims;
 
@@ -38,7 +37,7 @@ builder.Services.AddControllers().AddJsonOptions(c =>
     c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-builder.Services.AddScoped<IAuthentication, AuthenticationService>();
+builder.Services.AddScoped<IAuthentication, AuthenticationTokenService>();
 
 //var secretkey = builder.Configuration.GetSection("settings").GetSection("secretkey").ToString();
 

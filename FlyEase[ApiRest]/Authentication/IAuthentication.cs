@@ -1,7 +1,7 @@
 ﻿using FlyEase_ApiRest_.Models;
 using FlyEase_ApiRest_.Models.Commons;
 
-namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
+namespace FlyEase_ApiRest_.Authentication
 {
     public interface IAuthentication
     {

@@ -40,7 +40,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 
         [HttpGet]
         [Route("GetById/{id}")]
-      //  [Authorize]
+        //[Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetById(IdType id)
         {
             try

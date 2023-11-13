@@ -74,7 +74,7 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("nueva_velocidad_promedio", nuevoAvion.Velocidadpromedio),
             new NpgsqlParameter("nueva_cantidad_pasajeros", nuevoAvion.Cantidadpasajeros),
             new NpgsqlParameter("nueva_cantidad_carga", nuevoAvion.Cantidadcarga),
-            new NpgsqlParameter("nuevo_id_aereolinea", nuevoAvion.Idaereolinea)
+            new NpgsqlParameter("nuevo_id_aereolinea", nuevoAvion.Aereolinea.Idaereolinea)
                 };
 
                 await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_avion(@id_avion, @new_idavion, @nuevo_nombre, @nuevo_modelo, @nuevo_fabricante, @nueva_velocidad_promedio, @nueva_cantidad_pasajeros, @nueva_cantidad_carga, @nuevo_id_aereolinea)", parameters);

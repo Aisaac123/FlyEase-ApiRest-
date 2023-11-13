@@ -47,11 +47,6 @@ namespace FlyEase_ApiRest_.Controllers
                     v_imagen
 
                 };
-                if (v_imagen.Value == DBNull.Value)
-                {
-                    await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_ciudad(@nombre_ciudad, @nombre_region, @nombre_pais)", parameters);
-                    return "Ok";
-                }
                 await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_ciudad(@nombre_ciudad, @nombre_region, @nombre_pais, @_imagen)", parameters);
                 return "Ok";
             }
