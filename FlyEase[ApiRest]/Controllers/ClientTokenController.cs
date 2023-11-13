@@ -42,7 +42,7 @@ namespace FlyEase_ApiRest_.Controllers
 
                 if (Cliente == null)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, new { mensaje = "Cliente no registrado o se encuentra inactivo." });
+                    return StatusCode(StatusCodes.Status401Unauthorized, new { mensaje = "Aplicativo no registrado o se encuentra inactivo." });
                 }
                 if (string.IsNullOrEmpty(Cliente.Token))
                 {
@@ -50,16 +50,16 @@ namespace FlyEase_ApiRest_.Controllers
                     if (!Aut.Succes)
                     {
 
-                        return StatusCode(StatusCodes.Status401Unauthorized, new { Cliente.Token });
+                        return StatusCode(StatusCodes.Status401Unauthorized, new { Token = "", AdminAuthorization = false });
                     }
                     Cliente.Token = Aut.Tokens.PrimaryToken;
                     _context.ApiClients.Update(Cliente);
                     await _context.SaveChangesAsync();
 
-                    return StatusCode(StatusCodes.Status200OK, new { Cliente.Token });
+                    return StatusCode(StatusCodes.Status200OK, new { Cliente.Token, AdminAuthorization = false });
                 }
-                return StatusCode(StatusCodes.Status200OK, new { Cliente.Token });
 
+                return StatusCode(StatusCodes.Status200OK, new { Cliente.Token, AdminAuthorization = false });
             }
             catch (Npgsql.PostgresException ex) when (ex.SqlState == "39000" && ex.Message.Contains("Wrong key or corrupt data"))
             {
