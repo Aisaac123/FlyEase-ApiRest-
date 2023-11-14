@@ -87,7 +87,21 @@ app.UseEndpoints(endpoints =>
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.Map("/swagger", swaggerApp =>
+{
+    swaggerApp.UseStaticFiles(); // Si es necesario para servir archivos estáticos
+    swaggerApp.Use(async (context, next) =>
+    {
+        if (context.Request.Path.StartsWithSegments("/swagger") &&
+            !context.Request.Path.Value.EndsWith("index.html"))
+        {
+            // Sirve la página HTML personalizada
+            context.Request.Path = "/swagger/index.html";
+        }
 
+        await next();
+    });
+});
 app.UseHttpsRedirection();
 
 app.MapControllers();

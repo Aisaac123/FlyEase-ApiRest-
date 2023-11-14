@@ -77,7 +77,7 @@ namespace FlyEase_ApiRest_.Authentication
             {
                 claims.AddClaim(new Claim(ClaimTypes.Role, "CommonUser"));
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, "User"));
-                dateTime = DateTime.MaxValue;
+                dateTime = DateTime.UtcNow.AddHours(1);
             }
             else
             {

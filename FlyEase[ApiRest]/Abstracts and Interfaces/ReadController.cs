@@ -24,7 +24,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         [HttpGet]
         [Route("GetAll")]
         //[Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> Get()
+        public virtual async Task<IActionResult> Get()
         {
             List<TEntity> lista = new();
             try
@@ -41,7 +41,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         [HttpGet]
         [Route("GetById/{id}")]
         //[Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetById(IdType id)
+        public virtual async Task<IActionResult> GetById(IdType id)
         {
             try
             {

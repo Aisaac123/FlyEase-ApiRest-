@@ -73,7 +73,6 @@ namespace FlyEase_ApiRest_.Controllers
             var tokenExpiradoSupuestamente = tokenHandler.ReadJwtToken(request.ExpiredToken);
             if (tokenExpiradoSupuestamente.ValidTo > DateTime.UtcNow)
                 return BadRequest(new AuthenticationResponse { Succes = false, Msg = "Token Vigente" });
-            var token = await _context.Refreshtokenviews.FirstOrDefaultAsync(a => a.Refreshtoken == request.RefreshToken && a.Token == request.ExpiredToken);
             string idUsuario = tokenExpiradoSupuestamente.Claims.First(x =>
             x.Type == JwtRegisteredClaimNames.NameId).Value.ToString();
             var autorizacionResponse = await _aut.GetRefreshToken(int.Parse(idUsuario), request);
