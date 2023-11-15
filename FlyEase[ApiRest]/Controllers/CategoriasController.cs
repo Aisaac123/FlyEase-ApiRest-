@@ -25,11 +25,12 @@ namespace FlyEase_ApiRest_.Controllers
                 {
             new NpgsqlParameter("v_nombre", entity.Nombre),
             new NpgsqlParameter("v_descripcion", entity.Descripcion),
-            new NpgsqlParameter("v_estadocategoria", bool.Parse(entity.Estadocategoria.ToString())),
-            new NpgsqlParameter("v_tarifa", entity.Tarifa)
+            new NpgsqlParameter("v_estadocategoria", entity.Estadocategoria),
+            new NpgsqlParameter("v_tarifa", entity.Tarifa),
+            new NpgsqlParameter("v_comercial", entity.Comercial)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_categoria(@v_nombre, @v_descripcion, @v_estadocategoria, @v_tarifa)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_categoria(@v_nombre, @v_descripcion, @v_estadocategoria, @v_tarifa, @v_comercial)", parameters);
                 return "Ok";
             }
             catch (Exception ex)
@@ -66,10 +67,11 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("nuevo_nombre", nuevaCategoria.Nombre),
             new NpgsqlParameter("nueva_descripcion", nuevaCategoria.Descripcion),
             new NpgsqlParameter("nuevo_estado_categoria", nuevaCategoria.Estadocategoria),
-            new NpgsqlParameter("nueva_tarifa", nuevaCategoria.Tarifa)
+            new NpgsqlParameter("nueva_tarifa", nuevaCategoria.Tarifa),
+            new NpgsqlParameter("nuevo_comercial", nuevaCategoria.Comercial)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_categoria(@id_categoria, @nuevo_nombre, @nueva_descripcion, @nuevo_estado_categoria, @nueva_tarifa)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("CALL p_actualizar_categoria(@id_categoria, @nuevo_nombre, @nueva_descripcion, @nuevo_estado_categoria, @nueva_tarifa, @nuevo_comercial)", parameters);
                 return "Ok";
             }
             catch (Exception ex)

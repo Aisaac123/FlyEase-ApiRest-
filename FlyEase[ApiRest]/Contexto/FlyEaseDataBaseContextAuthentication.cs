@@ -323,6 +323,9 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
                 .HasMaxLength(30)
                 .HasColumnName("nombre");
             entity.Property(e => e.Tarifa).HasColumnName("tarifa");
+            entity.Property(e => e.Comercial)
+                .IsRequired()
+                .HasColumnName("comercial");
         });
 
         modelBuilder.Entity<Ciudad>(entity =>

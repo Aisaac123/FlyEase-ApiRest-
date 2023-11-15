@@ -181,10 +181,12 @@ namespace FlyEase_ApiRest_.Controllers
                 Vuelo vuelo = await _context.Set<Vuelo>()
                       .Include(arg => arg.Avion)
                       .ThenInclude(arg => arg.Asientos)
+                      .ThenInclude(arg => arg.Categoria)
                   .FirstOrDefaultAsync(item => item.Idvuelo == idVuelo);
 
                 var BoletosList = await _context.Set<Boleto>()
             .Include(arg => arg.Asiento)
+            .ThenInclude(arg => arg.Categoria)
             .Include(arg => arg.Vuelo)
             .ToListAsync();
 
@@ -195,7 +197,7 @@ namespace FlyEase_ApiRest_.Controllers
                         AsientosOcupados.Add(boleto.Asiento);
                     }
                 }
-                 AsientosDisponibles = vuelo.Avion.Asientos.Except(AsientosOcupados).ToList();
+                 AsientosDisponibles = vuelo.Avion.Asientos.Except(AsientosOcupados).ToList().FindAll(item => item.Categoria.Comercial);
 
 
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Succes = true, AsientosOcupados, AsientosDisponibles });

@@ -21,4 +21,5 @@ public partial class Categoria
 
     [JsonIgnore]
     public virtual ICollection<Asiento> Asientos { get; set; } = new List<Asiento>();
+    public bool Comercial { get; set; }
 }
