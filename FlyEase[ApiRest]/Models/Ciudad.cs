@@ -14,10 +14,12 @@ public partial class Ciudad
     public int? Idregion { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
+    [JsonIgnore]
+
     public byte[] Imagen { get; set; }
 
     [JsonIgnore]
-    public virtual ICollection<Aereopuerto> ListaAereopuertos { get; set; } = new List<Aereopuerto>();
+    public virtual ICollection<Aeropuerto> ListaAereopuertos { get; set; } = new List<Aeropuerto>();
 
     public virtual Region Region { get; set; }
 }

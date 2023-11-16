@@ -28,7 +28,7 @@ public partial class Avion
     [JsonIgnore]
     public virtual ICollection<Asiento> Asientos { get; set; } = new List<Asiento>();
 
-    public virtual Aereolinea Aereolinea { get; set; }
+    public virtual Aerolinea Aereolinea { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Vuelo> Vuelos { get; set; } = new List<Vuelo>();

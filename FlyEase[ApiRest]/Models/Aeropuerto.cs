@@ -2,7 +2,7 @@
 
 namespace FlyEase_ApiRest_.Models;
 
-public partial class Aereopuerto
+public partial class Aeropuerto
 {
     public int Idaereopuerto { get; set; }
 

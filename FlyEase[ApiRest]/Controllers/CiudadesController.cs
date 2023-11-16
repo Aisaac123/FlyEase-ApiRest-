@@ -7,16 +7,130 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+
+    /// <summary>
+    /// Controlador para gestionar operaciones CRUD de Ciudades.
+    /// </summary
+ 
     public class CiudadesController : CrudController<Ciudad, int, FlyEaseDataBaseContextAuthentication>
     {
+
+        /// <summary>
+        /// Constructor del controlador de Ciudades.
+        /// </summary>
+        /// <param name="context">Contexto de base de datos.</param>
+        /// <param name="hubContext">Contexto del hub.</param>
+
         public CiudadesController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Crea un nuevo registro de Ciudad.
+        /// </summary>
+        /// <param name="entity">Datos de la Ciudad a crear.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpPost("Post")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Post([FromBody] Ciudad entity)
+        {
+            var func = await base.Post(entity);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Actualiza un registro de Ciudad en la base de datos por su ID.
+        /// </summary>
+        /// <param name="entity">Datos de la Ciudad a actualizar.</param>
+        /// <param name="Id">ID de la Ciudad a actualizar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpPut("Put/{Id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Put([FromBody] Ciudad entity, int Id)
+        {
+            var func = await base.Put(entity, Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Elimina un registro de Ciudad de la base de datos por su ID.
+        /// </summary>
+        /// <param name="Id">ID de la Ciudad a eliminar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpDelete("Delete/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Delete(int Id)
+        {
+            var func = await base.Delete(Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Elimina todos los registros de Ciudades de la base de datos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpDelete("DeleteAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> DeleteAll()
+        {
+            var func = await base.DeleteAll();
+            return func;
+
+        }
+
+        /// <summary>
+        /// Obtiene la lista de Ciudades desde la base de datos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> Get()
+        {
+            var func = await base.Get();
+            return func;
+        }
+
+        /// <summary>
+        /// Obtiene un registro de Ciudad desde la base de datos por su ID.
+        /// </summary>
+        /// <param name="id">ID de la Ciudad a obtener.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> GetById(int id)
+        {
+            var func = await base.GetById(id);
+            return func;
+        }
+
+        /// <summary>
+        /// Inserta un nuevo registro de Ciudad en la base de datos.
+        /// </summary>
+        /// <param name="entity">Datos de la Ciudad a insertar.</param>
+        /// <returns>Resultado de la operación.</returns>
 
         protected override async Task<string> InsertProcedure(Ciudad entity)
         {
@@ -56,6 +170,12 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Elimina un registro de Ciudad de la base de datos por su ID.
+        /// </summary>
+        /// <param name="id_ciudad">ID de la Ciudad a eliminar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
         protected override async Task<string> DeleteProcedure(int id_ciudad)
         {
             try
@@ -73,6 +193,13 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+
+        /// <summary>
+        /// Actualiza un registro de Ciudad en la base de datos por su ID.
+        /// </summary>
+        /// <param name="nuevaCiudad">Nueva información de la Ciudad a actualizar.</param>
+        /// <param name="id_ciudad">ID de la Ciudad a actualizar.</param>
+        /// <returns>Resultado de la operación.</returns>
 
         protected override async Task<string> UpdateProcedure(Ciudad nuevaCiudad, int id_ciudad)
         {
@@ -115,6 +242,11 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Establece la lista de Ciudades en el contexto de la base de datos.
+        /// </summary>
+        /// <returns>Lista de Ciudades.</returns>
+
         protected override async Task<List<Ciudad>> SetContextList()
         {
             var list = await _context.Set<Ciudad>()
@@ -123,6 +255,12 @@ namespace FlyEase_ApiRest_.Controllers
           .ToListAsync();
             return list;
         }
+
+        /// <summary>
+        /// Establece una Ciudad específica en el contexto de la base de datos por su ID.
+        /// </summary>
+        /// <param name="id">ID de la Ciudad.</param>
+        /// <returns>Ciudad encontrada en la base de datos.</returns>
 
         protected override async Task<Ciudad> SetContextEntity(int id)
         {

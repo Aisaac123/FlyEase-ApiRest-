@@ -2,7 +2,7 @@
 
 namespace FlyEase_ApiRest_.Models;
 
-public partial class Aereolinea
+public partial class Aerolinea
 {
     public int Idaereolinea { get; set; }
 

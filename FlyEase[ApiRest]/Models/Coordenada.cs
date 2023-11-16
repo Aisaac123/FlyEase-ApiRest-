@@ -15,5 +15,5 @@ public partial class Coordenada
     public DateTime? Fecharegistro { get; set; }
 
     [JsonIgnore]
-    public virtual Aereopuerto Aereopuerto { get; set; }
+    public virtual Aeropuerto Aereopuerto { get; set; }
 }

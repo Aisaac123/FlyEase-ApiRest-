@@ -12,25 +12,43 @@ using System.IdentityModel.Tokens.Jwt;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+    [Route("FlyEaseApi/[controller]")]
+    [ApiController]
+
+    /// <summary>
+    /// Controlador para gestionar operaciones del administrador y sus respectivas autenticaciones.
+    /// </summary>
+    
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextAuthentication>
     {
         private readonly IAuthentication _aut;
+
+        /// <summary>
+        /// Constructor del controlador de Adminstradores.
+        /// </summary>
+        /// <param name="context">Contexto de base de datos.</param>
+        /// <param name="hubContext">Contexto del hub.</param>
 
         public AdministradoresController(FlyEaseDataBaseContextAuthentication context, IAuthentication aut) : base(context)
         {
             _context = context;
             _aut = aut;
         }
+
+        /// <summary>
+        /// Obtiene un administrador por nombre de usuario.
+        /// </summary>
+
         [HttpGet]
         [Route("GetByUsername/{AdminUsername}")]
-       // [Authorize(Policy = "AdminPolicy")]
-
+        [ProducesResponseType(typeof(Administrador), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByUsername(string AdminUsername)
         {
             try
             {
-                var Admin = await _context.Administradores
-         .FirstOrDefaultAsync(a => a.Usuario == AdminUsername);
+                var Admin = await _context.Administradores.FirstOrDefaultAsync(a => a.Usuario == AdminUsername);
                 if (Admin == null)
                 {
                     return BadRequest("No se ha encontrado");
@@ -44,9 +62,15 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Autentica un administrador.
+        /// </summary>
+
         [HttpPost]
         [Route("Authentication")]
-
+        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Authentication([FromBody] Administrador admin)
         {
             try
@@ -64,10 +88,15 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene un nuevo token de actualización.
+        /// </summary>
+
         [HttpPost]
         [Route("GetRefreshToken")]
-
-        public async Task<IActionResult> ObtenerRefreshToken([FromBody] RefreshTokenRequest request)
+        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetRefreshToken([FromBody] RefreshTokenRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenExpiradoSupuestamente = tokenHandler.ReadJwtToken(request.ExpiredToken);
@@ -80,6 +109,38 @@ namespace FlyEase_ApiRest_.Controllers
                 return Ok(autorizacionResponse);
             else
                 return BadRequest(autorizacionResponse);
+        }
+
+        // Documentación de métodos heredados de la clase abstracta utilizando la palabra clave base
+
+        /// <summary>
+        /// Obtiene todos los elementos heredados de la clase base.
+        /// </summary>
+
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Administrador>), StatusCodes.Status200OK)] // Actualizado a Administrador
+        public override async Task<IActionResult> Get()
+        {
+            var func = await base.Get();
+            return func;
+        }
+
+        /// <summary>
+        /// Obtiene un elemento por ID heredado de la clase base.
+        /// </summary>
+        /// <param name="id">ID del elemento a obtener.</param>
+        /// <returns>El elemento solicitado.</returns>
+
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Administrador), StatusCodes.Status200OK)] // Actualizado a Administrador
+        public override async Task<IActionResult> GetById(int id)
+        {
+            var func = await base.GetById(id);
+            return func;
+
         }
     }
 }

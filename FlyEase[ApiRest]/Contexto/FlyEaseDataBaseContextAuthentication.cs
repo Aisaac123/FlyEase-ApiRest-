@@ -17,9 +17,9 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
 
     public virtual DbSet<Administrador> Administradores { get; set; }
 
-    public virtual DbSet<Aereolinea> Aereolineas { get; set; }
+    public virtual DbSet<Aerolinea> Aereolineas { get; set; }
 
-    public virtual DbSet<Aereopuerto> Aereopuertos { get; set; }
+    public virtual DbSet<Aeropuerto> Aereopuertos { get; set; }
 
     public virtual DbSet<ApiClient> ApiClients { get; set; }
 
@@ -99,7 +99,7 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
                 .HasColumnName("usuario");
         });
 
-        modelBuilder.Entity<Aereolinea>(entity =>
+        modelBuilder.Entity<Aerolinea>(entity =>
         {
             entity.HasKey(e => e.Idaereolinea).HasName("pk_aereolineas_idaereolinea");
 
@@ -130,7 +130,7 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
                 .HasColumnName("nombre");
         });
 
-        modelBuilder.Entity<Aereopuerto>(entity =>
+        modelBuilder.Entity<Aeropuerto>(entity =>
         {
             entity.HasKey(e => e.Idaereopuerto).HasName("pk_aereopuertos_idaereopuerto");
 
@@ -160,7 +160,7 @@ public partial class FlyEaseDataBaseContextAuthentication : DbContext
                 .HasConstraintName("fk_aereopuertos_idciudad");
 
             entity.HasOne(d => d.Coordenadas).WithOne(p => p.Aereopuerto)
-                .HasForeignKey<Aereopuerto>(d => d.Idcoordenada)
+                .HasForeignKey<Aeropuerto>(d => d.Idcoordenada)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_aereopuertos_idcoordenada");
         });

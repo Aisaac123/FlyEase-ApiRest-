@@ -11,12 +11,126 @@ using Npgsql;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+
+    /// <summary>
+    /// Controlador para gestionar operaciones CRUD de Clientes.
+    /// </summary>
     public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextAuthentication>
     {
+
+        /// <summary>
+        /// Constructor del controlador de Clientes.
+        /// </summary>
+        /// <param name="context">Contexto de base de datos.</param>
+        /// <param name="hubContext">Contexto del hub.</param>
+
         public ClientesController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Crea un nuevo registro de Cliente.
+        /// </summary>
+        /// <param name="entity">Datos del Cliente a crear.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+        /// 
+
+        [HttpPost("Post")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Post([FromBody] Cliente entity)
+        {
+            var func = await base.Post(entity);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Actualiza un registro de Cliente en la base de datos por su ID.
+        /// </summary>
+        /// <param name="entity">Datos del Cliente a actualizar.</param>
+        /// <param name="Id">ID del Cliente a actualizar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpPut("Put/{Id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Put([FromBody] Cliente entity, string Id)
+        {
+            var func = await base.Put(entity, Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Elimina un registro de Cliente de la base de datos por su ID.
+        /// </summary>
+        /// <param name="Id">ID del Cliente a eliminar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpDelete("Delete/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Delete(string Id)
+        {
+            var func = await base.Delete(Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Elimina todos los registros de Clientes de la base de datos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpDelete("DeleteAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> DeleteAll()
+        {
+            var func = await base.DeleteAll();
+            return func;
+
+        }
+
+        /// <summary>
+        /// Obtiene la lista de Clientes desde la base de datos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> Get()
+        {
+            var func = await base.Get();
+            return func;
+        }
+
+        /// <summary>
+        /// Obtiene un registro de Cliente desde la base de datos por su ID.
+        /// </summary>
+        /// <param name="id">ID del Cliente a obtener.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> GetById(string id)
+        {
+            var func = await base.GetById(id);
+            return func;
+        }
+       
+        /// <summary>
+        /// Inserta un nuevo registro de Cliente en la base de datos.
+        /// </summary>
+        /// <param name="entity">Datos del Cliente a insertar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
         protected override async Task<string> InsertProcedure(Cliente entity)
         {
             try
@@ -39,6 +153,13 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+
+        /// <summary>
+        /// Actualiza un registro de Cliente en la base de datos por su ID.
+        /// </summary>
+        /// <param name="entity">Nueva información del Cliente a actualizar.</param>
+        /// <param name="OldId">ID del Cliente a actualizar.</param>
+        /// <returns>Resultado de la operación.</returns>
 
         protected override async Task<string> UpdateProcedure(Cliente entity, string OldId)
         {
@@ -64,6 +185,12 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Elimina un registro de Cliente de la base de datos por su ID.
+        /// </summary>
+        /// <param name="Old_Id">ID del Cliente a eliminar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
         protected override async Task<string> DeleteProcedure(string Old_Id)
         {
             try
@@ -82,8 +209,17 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene los boletos asociados a un Cliente específico.
+        /// </summary>
+        /// <param name="id_cliente">ID del Cliente.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+
         [HttpGet]
-        [Route("GetBoletosByCliente/{id_cliente}")]
+        [Route("GetById/{id_cliente}/Boletos")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Boleto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAsiento(string id_cliente)
         {
             try
@@ -127,7 +263,7 @@ namespace FlyEase_ApiRest_.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, new { mensaje = "Cliente no encontrado", Succes = false, response = new List<Asiento>() });
+                    return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = "Cliente no encontrado", Succes = false, response = new List<Asiento>() });
                 }
             }
             catch (Exception ex)

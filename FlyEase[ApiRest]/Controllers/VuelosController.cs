@@ -7,21 +7,141 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using GeoCoordinatePortable;
+
 
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+
+    /// <summary>
+    /// Controlador para operaciones CRUD relacionadas con vuelos.
+    /// </summary>
+
     public class VuelosController : CrudController<Vuelo, int, FlyEaseDataBaseContextAuthentication>
     {
+
+        /// <summary>
+        /// Constructor del controlador de vuelos.
+        /// </summary>
+        /// <param name="context">Contexto de base de datos.</param>
+        /// <param name="hubContext">Contexto del hub.</param>
+
         public VuelosController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Método HTTP POST para agregar un vuelo.
+        /// </summary>
+        /// <param name="entity">Entidad de tipo Vuelo a agregar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
+        [HttpPost("Post")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Post([FromBody] Vuelo entity)
+        {
+            var func = await base.Post(entity);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Método HTTP PUT para actualizar un vuelo por su ID.
+        /// </summary>
+        /// <param name="entity">Entidad de tipo Vuelo con la información actualizada.</param>
+        /// <param name="Id">ID del vuelo a actualizar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
+        [HttpPut("Put/{Id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Put([FromBody] Vuelo entity, int Id)
+        {
+            var func = await base.Put(entity, Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Método HTTP DELETE para eliminar un vuelo por su ID.
+        /// </summary>
+        /// <param name="Id">ID del vuelo a eliminar.</param>
+        /// <returns>Resultado de la operación.</returns>
+
+        [HttpDelete("Delete/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Delete(int Id)
+        {
+            var func = await base.Delete(Id);
+            return func;
+
+        }
+
+        /// <summary>
+        /// Método HTTP DELETE para eliminar todos los vuelos.
+        /// </summary>
+        /// <returns>Resultado de la operación.</returns>
+
+        [HttpDelete("DeleteAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> DeleteAll()
+        {
+            var func = await base.DeleteAll();
+            return func;
+
+        }
+
+        /// <summary>
+        /// Método HTTP GET para obtener todos los vuelos.
+        /// </summary>
+        /// <returns>Lista de vuelos.</returns>
+
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> Get()
+        {
+            var func = await base.Get();
+            return func;
+        }
+
+        /// <summary>
+        /// Método HTTP GET para obtener un vuelo por su ID.
+        /// </summary>
+        /// <param name="id">ID del vuelo a obtener.</param>
+        /// <returns>El vuelo solicitado.</returns>
+
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> GetById(int id)
+        {
+            var func = await base.GetById(id);
+            return func;
+        }
+
+        /// <summary>
+        /// Procedimiento para insertar un nuevo vuelo en la base de datos.
+        /// </summary>
+
         protected override async Task<string> InsertProcedure(Vuelo entity)
         {
             try
             {
+                GeoCoordinate DespegueCord = new GeoCoordinate(entity.Aereopuerto_Despegue.Coordenadas.Latitud, entity.Aereopuerto_Despegue.Coordenadas.Longitud);
+
+                // Coordenadas de Olaya Herrera, Medellín
+                GeoCoordinate DestinoCord = new GeoCoordinate(entity.Aereopuerto_Destino.Coordenadas.Latitud, entity.Aereopuerto_Destino.Coordenadas.Longitud);
+                double distance = DespegueCord.GetDistanceTo(DestinoCord) / 1000; 
+
+
                 var parameters = new NpgsqlParameter[]
                 {
             new NpgsqlParameter("v_preciovuelo", double.Parse(entity.Preciovuelo.ToString())),
@@ -31,8 +151,9 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("v_iddespegue", entity.Aereopuerto_Despegue.Idaereopuerto),
             new NpgsqlParameter("v_iddestino", entity.Aereopuerto_Destino.Idaereopuerto),
             new NpgsqlParameter("v_idavion", entity.Avion.Idavion),
+            new NpgsqlParameter("v_distancia", distance)
                 };
-                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("CALL p_insertar_vuelo(@v_distancia, @v_preciovuelo, @v_tarifatemporada, @v_descuento, @v_fechayhoradespegue, @v_iddespegue, @v_iddestino, @v_idavion)", parameters);
                 return "Ok";
             }
             catch (Exception ex)
@@ -41,6 +162,10 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Procedimiento para eliminar un vuelo de la base de datos.
+        /// </summary>
+       
         protected override async Task<string> DeleteProcedure(int id_vuelo)
         {
             try
@@ -59,17 +184,27 @@ namespace FlyEase_ApiRest_.Controllers
             }
         }
 
+        /// <summary>
+        /// Procedimiento para actualizar un vuelo en la base de datos.
+        /// </summary>
+
         protected override async Task<string> UpdateProcedure(Vuelo nuevoVuelo, int id_vuelo)
         {
             try
             {
+                GeoCoordinate DespegueCord = new GeoCoordinate(nuevoVuelo.Aereopuerto_Despegue.Coordenadas.Latitud, nuevoVuelo.Aereopuerto_Despegue.Coordenadas.Longitud);
+
+                // Coordenadas de Olaya Herrera, Medellín
+                GeoCoordinate DestinoCord = new GeoCoordinate(nuevoVuelo.Aereopuerto_Destino.Coordenadas.Latitud, nuevoVuelo.Aereopuerto_Destino.Coordenadas.Longitud);
+                double distance = DespegueCord.GetDistanceTo(DestinoCord) / 1000;
+
                 var parameters = new NpgsqlParameter[]
                 {
             new NpgsqlParameter("id_vuelo", id_vuelo),
             new NpgsqlParameter("nuevo_precio_vuelo", nuevoVuelo.Preciovuelo),
             new NpgsqlParameter("nueva_tarifatemporada", nuevoVuelo.Tarifatemporada),
             new NpgsqlParameter("nuevo_descuento", nuevoVuelo.Descuento),
-            new NpgsqlParameter("nueva_distancia_recorrida", nuevoVuelo.Distanciarecorrida),
+            new NpgsqlParameter("nueva_distancia_recorrida", distance),
             new NpgsqlParameter("nueva_fecha_hora_llegada", nuevoVuelo.Fechayhorallegada),
             new NpgsqlParameter("nuevo_cupo", nuevoVuelo.Cupo),
             new NpgsqlParameter("nuevo_id_despegue", nuevoVuelo.Aereopuerto_Despegue.Idaereopuerto),
@@ -85,6 +220,10 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+
+        /// <summary>
+        /// Método para obtener la lista de vuelos desde el contexto.
+        /// </summary>
 
         protected override async Task<List<Vuelo>> SetContextList()
         {
@@ -115,6 +254,10 @@ namespace FlyEase_ApiRest_.Controllers
             return list;
         }
 
+        /// <summary>
+        /// Método para obtener un vuelo específico desde el contexto por su ID.
+        /// </summary>
+
         protected override async Task<Vuelo> SetContextEntity(int id)
         {
             var entity = await _context.Set<Vuelo>()
@@ -130,10 +273,15 @@ namespace FlyEase_ApiRest_.Controllers
                     .ThenInclude(arg => arg.Pais)
                     .Include(arg => arg.Aereopuerto_Destino)
                     .ThenInclude(arg => arg.Coordenadas)
+                    .Include(arg => arg.Avion)
                     .Include(arg => arg.Estado)
          .FirstOrDefaultAsync(a => a.Idvuelo == id);
             return entity;
         }
+
+        /// <summary>
+        /// Método para obtener todos los vuelos disponibles.
+        /// </summary>
 
         [HttpGet]
         [Route("GetAllAvailable")]
@@ -168,6 +316,11 @@ namespace FlyEase_ApiRest_.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message, Succes = false, response = lista });
             }
         }
+
+        /// <summary>
+        /// Método para obtener los asientos disponibles para un vuelo específico.
+        /// </summary>
+        /// <param name="idVuelo">ID del vuelo.</param>
 
         [HttpGet]
         [Route("Vuelo/{idVuelo}/Avion/AsientosDisponibles")]

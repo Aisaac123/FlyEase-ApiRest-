@@ -20,10 +20,12 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
             _hubContext = hubContext;
         }
 
-        [HttpPost]
-        [Route("Post")]
-       // [Authorize]
-
+        /// <summary>
+        /// Crea un nuevo elemento.
+        /// </summary>
+        [HttpPost("Post")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             try
@@ -33,7 +35,6 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 {
                     await _context.SaveChangesAsync();
 
-                    // Notificar a los clientes sobre la actualización
                     await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha insertado en la base de datos");
 
                     return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true, response = entity });
@@ -46,10 +47,12 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
             }
         }
 
-        [HttpPut]
-        [Route("Put/{Id}")]
-    //    [Authorize]
-
+        /// <summary>
+        /// Actualiza un elemento por ID.
+        /// </summary>
+        [HttpPut("Put/{Id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
             try
@@ -59,7 +62,6 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 {
                     await _context.SaveChangesAsync();
 
-                    // Notificar a los clientes sobre la actualización
                     await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha actualizado en la base de datos");
 
                     return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true, response = entity });
@@ -72,10 +74,13 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
             }
         }
 
-        [HttpDelete]
-        [Route("Delete/{Id}")]
-     //   [Authorize]
-
+        /// <summary>
+        /// Elimina un elemento por ID.
+        /// </summary>
+        [HttpDelete("Delete/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public virtual async Task<IActionResult> Delete(IdType Id)
         {
             try
@@ -85,7 +90,6 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 {
                     await _context.SaveChangesAsync();
 
-                    // Notificar a los clientes sobre la actualización
                     await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha eliminado en la base de datos");
 
                     return StatusCode(StatusCodes.Status200OK, new { mensaje = "Operación realizada con éxito", Success = true });
@@ -98,10 +102,12 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
             }
         }
 
-        [HttpDelete]
-        [Route("DeleteAll")]
-     //   [Authorize]
-
+        /// <summary>
+        /// Elimina todos los elementos.
+        /// </summary>
+        [HttpDelete("DeleteAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public virtual async Task<IActionResult> DeleteAll()
         {
             try
@@ -110,8 +116,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 _context.Set<TEntity>().RemoveRange(entities);
                 _context.SaveChanges();
 
-                // Notificar a los clientes sobre la actualización
-                await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha elimininado en la base de datos");
+                await _hubContext.Clients.All.SendAsync("UpdateRequest", "Se ha eliminado en la base de datos");
 
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "Ok", Success = true });
             }

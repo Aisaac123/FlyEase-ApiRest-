@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Authentication;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,22 +11,43 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+
+    /// <summary>
+    /// Controlador para la generación de tokens de los aplicativos registrados.
+    /// </summary>
+    
     [EnableCors("Reglas")]
     [Route("FlyEaseApi/[controller]")]
     [ApiController]
-    public class ClientTokenController : Controller
+    public class ClientTokenController : ControllerBase
     {
         private readonly IAuthentication _aut;
-        private FlyEaseDataBaseContextAuthentication _context;
+        private readonly FlyEaseDataBaseContextAuthentication _context;
 
+        /// <summary>
+        /// Constructor del controlador de tokens del aplicativo.
+        /// </summary>
+        /// <param name="context">Contexto de la base de datos.</param>
+        /// <param name="aut">Servicio de autenticación.</param>
+        
         public ClientTokenController(FlyEaseDataBaseContextAuthentication context, IAuthentication aut)
         {
             _context = context;
             _aut = aut;
         }
 
+        /// <summary>
+        /// Genera un token de cliente.
+        /// </summary>
+        /// <param name="apiclient">Datos del cliente para generar el token.</param>
+        /// <returns>Resultados de la generación del token.</returns>
+        
         [HttpPost]
         [Route("GenerateClientToken")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GenerateClientToken([FromBody] ApiClient apiclient)
         {
             try

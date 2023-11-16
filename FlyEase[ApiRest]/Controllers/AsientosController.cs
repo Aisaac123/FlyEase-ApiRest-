@@ -2,21 +2,131 @@
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace FlyEase_ApiRest_.Controllers
 {
-    [EnableCors("Reglas")]
-
+    /// <summary>
+    /// Controlador para gestionar operaciones CRUD de Asientos.
+    /// </summary>
     public class AsientosController : CrudController<Asiento, int, FlyEaseDataBaseContextAuthentication>
     {
+
+        /// <summary>
+        /// Constructor del controlador de Asientos.
+        /// </summary>
+        /// <param name="context">Contexto de base de datos.</param>
+        /// <param name="hubContext">Contexto del hub.</param>
+
         public AsientosController(FlyEaseDataBaseContextAuthentication context, IHubContext<WebSocketHub> hubContext) : base(context, hubContext)
         {
             _context = context;
         }
+        
+        /// <summary>
+        /// Crea un nuevo registro de Asiento.
+        /// </summary>
+        /// <param name="entity">Datos del Asiento a crear.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+     
+        [HttpPost("Post")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Post([FromBody] Asiento entity)
+        {
+            var func = await base.Post(entity);
+            return func;
 
+        }
+     
+        /// <summary>
+        /// Actualiza un registro de Asiento existente.
+        /// </summary>
+        /// <param name="entity">Datos del Asiento a actualizar.</param>
+        /// <param name="Id">ID del Asiento a actualizar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+     
+        [HttpPut("Put/{Id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Put([FromBody] Asiento entity, int Id)
+        {
+            var func = await base.Put(entity, Id);
+            return func;
+
+        }
+     
+        /// <summary>
+        /// Elimina un registro de Asiento por ID.
+        /// </summary>
+        /// <param name="Id">ID del Asiento a eliminar.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+     
+        [HttpDelete("Delete/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> Delete(int Id)
+        {
+            var func = await base.Delete(Id);
+            return func;
+
+        }
+     
+        /// <summary>
+        /// Elimina todos los registros de Asientos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+     
+        [HttpDelete("DeleteAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public override async Task<IActionResult> DeleteAll()
+        {
+            var func = await base.DeleteAll();
+            return func;
+
+        }
+    
+        /// <summary>
+        /// Obtiene todos los registros de Asientos.
+        /// </summary>
+        /// <returns>Respuesta de la solicitud.</returns>
+    
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> Get()
+        {
+            var func = await base.Get();
+            return func;
+        }
+     
+        /// <summary>
+        /// Obtiene un registro de Asiento por ID.
+        /// </summary>
+        /// <param name="id">ID del Asiento a obtener.</param>
+        /// <returns>Respuesta de la solicitud.</returns>
+     
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        public override async Task<IActionResult> GetById(int id)
+        {
+            var func = await base.GetById(id);
+            return func;
+        }
+     
+        /// <summary>
+        /// Inserta un nuevo registro de Asiento en la base de datos.
+        /// </summary>
+        /// <param name="entity">Datos del Asiento a insertar.</param>
+        /// <returns>Resultado de la operación.</returns>
+     
         protected override async Task<string> InsertProcedure(Asiento entity)
         {
             try
@@ -37,7 +147,13 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
-
+     
+        /// <summary>
+        /// Elimina un registro de Asiento de la base de datos por su ID.
+        /// </summary>
+        /// <param name="id_asiento">ID del Asiento a eliminar.</param>
+        /// <returns>Resultado de la operación.</returns>
+    
         protected override async Task<string> DeleteProcedure(int id_asiento)
         {
             try
@@ -55,7 +171,14 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
-
+     
+        /// <summary>
+        /// Actualiza un registro de Asiento en la base de datos por su ID.
+        /// </summary>
+        /// <param name="nuevoAsiento">Nueva información del Asiento a actualizar.</param>
+        /// <param name="id_asiento">ID del Asiento a actualizar.</param>
+        /// <returns>Resultado de la operación.</returns>
+     
         protected override async Task<string> UpdateProcedure(Asiento nuevoAsiento, int id_asiento)
         {
             try
@@ -77,7 +200,12 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
-
+     
+        /// <summary>
+        /// Obtiene la lista de Asientos desde la base de datos.
+        /// </summary>
+        /// <returns>Lista de Asientos.</returns>
+     
         protected override async Task<List<Asiento>> SetContextList()
         {
             var list = await _context.Set<Asiento>()
@@ -87,7 +215,13 @@ namespace FlyEase_ApiRest_.Controllers
          .ToListAsync();
             return list;
         }
-
+     
+        /// <summary>
+        /// Obtiene un registro de Asiento desde la base de datos por su ID.
+        /// </summary>
+        /// <param name="id">ID del Asiento a obtener.</param>
+        /// <returns>Asiento obtenido.</returns>
+     
         protected override async Task<Asiento> SetContextEntity(int id)
         {
             var entity = await _context.Set<Asiento>()
