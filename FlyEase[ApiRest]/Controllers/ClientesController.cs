@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NuGet.Common;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -15,6 +17,9 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para gestionar operaciones CRUD de Clientes.
     /// </summary>
+    
+    [SwaggerTag("Metodos Crud para Clientes")]
+
     public class ClientesController : CrudController<Cliente, string, FlyEaseDataBaseContextAuthentication>
     {
 
@@ -37,8 +42,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// 
 
         [HttpPost("Post")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Registrar un cliente.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Cliente entity)
         {
             var func = await base.Post(entity);
@@ -54,8 +59,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPut("Put/{Id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Actualizar un cliente especifico por medio de su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Cliente entity, string Id)
         {
             var func = await base.Put(entity, Id);
@@ -70,9 +75,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpDelete("Delete/{Id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar un cliente especifico por medio de su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Delete(string Id)
         {
             var func = await base.Delete(Id);
@@ -86,8 +90,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpDelete("DeleteAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar todos los clientes registrados (Usar Con Precaucion).")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> DeleteAll()
         {
             var func = await base.DeleteAll();
@@ -101,8 +105,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener todos los clientes registrados.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Cliente>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -116,9 +120,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener un cliente por medio de su ID (No.Documento).")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(Cliente))]
         public override async Task<IActionResult> GetById(string id)
         {
             var func = await base.GetById(id);
@@ -217,9 +220,12 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpGet]
         [Route("GetById/{id_cliente}/Boletos")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Boleto>), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener todos los boletos de un cliente en especifico.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Boleto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Cliente no encontrado o datos erroneos", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Sin autorizacion, por favor solicite el token", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+
         public async Task<IActionResult> GetAsiento(string id_cliente)
         {
             try

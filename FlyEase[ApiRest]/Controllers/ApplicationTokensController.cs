@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
+using NuGet.Common;
+using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace FlyEase_ApiRest_.Controllers
@@ -15,11 +17,14 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para la generación de tokens de los aplicativos registrados.
     /// </summary>
-    
+
+
+    [SwaggerTag("Metodos de autenticacion y autorizacion para aplicativos registrados")]
+
     [EnableCors("Reglas")]
     [Route("FlyEaseApi/[controller]")]
     [ApiController]
-    public class ClientTokenController : ControllerBase
+    public class ApplicationTokensController : ControllerBase
     {
         private readonly IAuthentication _aut;
         private readonly FlyEaseDataBaseContextAuthentication _context;
@@ -30,7 +35,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <param name="context">Contexto de la base de datos.</param>
         /// <param name="aut">Servicio de autenticación.</param>
         
-        public ClientTokenController(FlyEaseDataBaseContextAuthentication context, IAuthentication aut)
+        public ApplicationTokensController(FlyEaseDataBaseContextAuthentication context, IAuthentication aut)
         {
             _context = context;
             _aut = aut;
@@ -43,11 +48,11 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultados de la generación del token.</returns>
         
         [HttpPost]
-        [Route("GenerateClientToken")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [Route("GenerateAppsToken")]
+        [SwaggerOperation("Generar respectivo token para los aplicativos asociados.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito.", typeof(Token))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Bad request. ClientId tiene un formato de codificacion erroneo.", typeof(string)) ]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor.", typeof(string))]
         public async Task<IActionResult> GenerateClientToken([FromBody] ApiClient apiclient)
         {
             try

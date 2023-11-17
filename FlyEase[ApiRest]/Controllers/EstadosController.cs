@@ -3,10 +3,16 @@ using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+    /// <summary>
+    /// Controlador de lectura para los Estados registrados.
+    /// </summary>
+    [SwaggerTag("Metodos de lectura para Estados")]
+
     public class EstadosController : ReadController<Estado, int, FlyEaseDataBaseContextAuthentication>
     {
 
@@ -28,8 +34,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// </summary>
 
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Administrador>), StatusCodes.Status200OK)] // Actualizado a Administrador
+        [SwaggerOperation(Summary = "Obtener todos los Estados.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Consulta realizada con exito", typeof(List<Estado>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -43,10 +49,9 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>El elemento solicitado.</returns>
 
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Administrador), StatusCodes.Status200OK)] // Actualizado a Administrador
-        public override async Task<IActionResult> GetById(int id)
+        [SwaggerOperation(Summary = "Obtener un Estado por su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(Estado))]
+    public override async Task<IActionResult> GetById(int id)
         {
             var func = await base.GetById(id);
             return func;

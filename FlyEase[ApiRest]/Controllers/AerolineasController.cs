@@ -10,6 +10,7 @@ namespace FlyEase_ApiRest_.Controllers
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Npgsql;
+    using Swashbuckle.AspNetCore.Annotations;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <summary>
         /// Controlador para gestionar operaciones CRUD de Aerolineas.
         /// </summary>
-        
+        [SwaggerTag("Metodos Crud para Aerolineas")]
+
         public class AerolineasController : CrudController<Aerolinea, int, FlyEaseDataBaseContextAuthentication>
         {
 
@@ -45,8 +47,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpPost("Post")]
-            [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+            [SwaggerOperation("Registrar una nueva Aerolinea.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Post([FromBody] Aerolinea entity)
             {
                 var func = await base.Post(entity);
@@ -58,8 +60,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpPut("Put/{Id}")]
-            [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+            [SwaggerOperation("Actualizar un registro de Aerolinea existente.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Put([FromBody] Aerolinea entity, int Id)
             {
                 var func = await base.Put(entity, Id);
@@ -71,9 +73,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpDelete("Delete/{Id}")]
-            [ProducesResponseType(StatusCodes.Status200OK)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+            [SwaggerOperation("Eliminar un registro de Aerolinea por ID.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Delete(int Id)
             {
                 var func = await base.Delete(Id);
@@ -85,8 +86,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpDelete("DeleteAll")]
-            [ProducesResponseType(StatusCodes.Status200OK)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+            [SwaggerOperation("Eliminar todos los registros de Aerolineas.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> DeleteAll()
             {
                 var func = await base.DeleteAll();
@@ -98,8 +99,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpGet("GetAll")]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-            [ProducesResponseType(typeof(List<Aerolinea>), StatusCodes.Status200OK)]
+            [SwaggerOperation("Obtener todos los registros de Aerolineas.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Aerolinea>))]
             public override async Task<IActionResult> Get()
             {
                 var func = await base.Get();
@@ -113,9 +114,8 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>La Aerolinea solicitada.</returns>
 
             [HttpGet("GetById/{id}")]
-            [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-            [ProducesResponseType(typeof(Aerolinea), StatusCodes.Status200OK)]
+            [SwaggerOperation("Obtener un registro de Aerolinea por ID.")]
+            [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Aerolinea))]
             public override async Task<IActionResult> GetById(int id)
             {
                 var func = await base.GetById(id);

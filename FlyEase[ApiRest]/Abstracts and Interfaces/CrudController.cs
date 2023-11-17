@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
@@ -26,6 +28,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         [HttpPost("Post")]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+
         public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             try
@@ -53,6 +57,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         [HttpPut("Put/{Id}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+
         public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
             try
@@ -79,8 +85,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// </summary>
         [HttpDelete("Delete/{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
         public virtual async Task<IActionResult> Delete(IdType Id)
         {
             try
@@ -108,6 +113,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         [HttpDelete("DeleteAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+
         public virtual async Task<IActionResult> DeleteAll()
         {
             try

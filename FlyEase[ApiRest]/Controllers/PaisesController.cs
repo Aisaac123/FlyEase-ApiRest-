@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -14,6 +16,7 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para operaciones CRUD relacionadas con países.
     /// </summary>
+    [SwaggerTag("Metodos Crud para Paises")]
 
     public class PaisesController : CrudController<Pais, int, FlyEaseDataBaseContextAuthentication>
     {
@@ -36,8 +39,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPost("Post")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Registrar un nuevo país")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha creado el país con éxito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Pais entity)
         {
             var func = await base.Post(entity);
@@ -53,8 +56,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPut("Put/{Id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Actualizar información de un país existente")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha actualizado el país con éxito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Pais entity, int Id)
         {
             var func = await base.Put(entity, Id);
@@ -70,9 +73,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpDelete("Delete/{Id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar un país por su ID")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha eliminado el país con éxito", typeof(string))]
         public override async Task<IActionResult> Delete(int Id)
         {
             var func = await base.Delete(Id);
@@ -86,8 +88,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpDelete("DeleteAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar todos los países")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se han eliminado todos los países con éxito", typeof(string))]
         public override async Task<IActionResult> DeleteAll()
         {
             var func = await base.DeleteAll();
@@ -101,8 +103,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener todos los países")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se han obtenido todos los países con éxito", typeof(List<Pais>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -116,9 +118,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener un país por su ID")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha obtenido el país con éxito", typeof(Pais))]
         public override async Task<IActionResult> GetById(int id)
         {
             var func = await base.GetById(id);

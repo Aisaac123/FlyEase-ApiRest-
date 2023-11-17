@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using GeoCoordinatePortable;
-
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -17,6 +18,8 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para operaciones CRUD relacionadas con vuelos.
     /// </summary>
+
+    [SwaggerTag("Metodos Crud para Vuelos")]
 
     public class VuelosController : CrudController<Vuelo, int, FlyEaseDataBaseContextAuthentication>
     {
@@ -39,8 +42,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpPost("Post")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Registra un vuelo")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha creado y registrado con exito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Vuelo entity)
         {
             var func = await base.Post(entity);
@@ -56,8 +59,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpPut("Put/{Id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Actualizar los datos de un vuelo")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha actualizado con éxito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Vuelo entity, int Id)
         {
             var func = await base.Put(entity, Id);
@@ -72,9 +75,9 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpDelete("Delete/{Id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar un vuelo específico", OperationId = "EliminarVuelo")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se ha eliminado con exito", typeof(string))]
+
         public override async Task<IActionResult> Delete(int Id)
         {
             var func = await base.Delete(Id);
@@ -88,8 +91,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpDelete("DeleteAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar todo los datos (Usar con precaucion)")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Se han eliminado todos los datos con exito", typeof(string))]
         public override async Task<IActionResult> DeleteAll()
         {
             var func = await base.DeleteAll();
@@ -103,8 +106,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Lista de vuelos.</returns>
 
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener todos los vuelo especifico")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Consulta realizada con exito", typeof(List<Vuelo>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -118,9 +121,9 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>El vuelo solicitado.</returns>
 
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener un vuelo especifico")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Consulta unica Realizada con exito", typeof(Vuelo))]
+
         public override async Task<IActionResult> GetById(int id)
         {
             var func = await base.GetById(id);
@@ -243,6 +246,7 @@ namespace FlyEase_ApiRest_.Controllers
                     .Include(arg => arg.Estado)
                     .Include(arg => arg.Avion)
                     .ThenInclude(arg => arg.Aereolinea)
+                    .Include(arg => arg.Estado)
                 .ToListAsync();
 
             // Eliminar repeticiones:
@@ -274,6 +278,7 @@ namespace FlyEase_ApiRest_.Controllers
                     .Include(arg => arg.Aeropuerto_Destino)
                     .ThenInclude(arg => arg.Coordenadas)
                     .Include(arg => arg.Avion)
+                    .ThenInclude(arg => arg.Aereolinea)
                     .Include(arg => arg.Estado)
          .FirstOrDefaultAsync(a => a.Idvuelo == id);
             return entity;
@@ -286,6 +291,11 @@ namespace FlyEase_ApiRest_.Controllers
         [HttpGet]
         [Route("GetAllAvailable")]
         [Authorize]
+        [SwaggerOperation("Obtener los vuelos que tengan cupo y esten disponibles")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Operacion Realizada con exito", typeof(List<Avion>))] 
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Error interno del servidor")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+
         public virtual async Task<IActionResult> GetAvailable()
         {
             List<Vuelo> lista = new();
@@ -324,6 +334,10 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpGet]
         [Route("Vuelo/{idVuelo}/Avion/AsientosDisponibles")]
+        [SwaggerOperation("Obtener asientos disponibles y ocupados de un vuelo especifico")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Operacion Realizada con exito", typeof(List<Asiento>))]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Error interno del servidor")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
         public virtual async Task<IActionResult> GetAsientosVuelo(int idVuelo)
         {
             List<Asiento> AsientosDisponibles = new();

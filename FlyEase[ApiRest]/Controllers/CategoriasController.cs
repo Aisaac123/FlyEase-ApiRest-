@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -13,6 +14,9 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para gestionar operaciones CRUD de Categorías.
     /// </summary>
+
+    [SwaggerTag("Metodos Crud para Categorias")]
+
     public class CategoriasController : CrudController<Categoria, int, FlyEaseDataBaseContextAuthentication>
     {
 
@@ -35,8 +39,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// 
         
         [HttpPost("Post")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Registrar una nueva categoría.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Categoria entity)
         {
             var func = await base.Post(entity);
@@ -52,8 +56,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpPut("Put/{Id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Actualizar una categoría por su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Categoria entity, int Id)
         {
             var func = await base.Put(entity, Id);
@@ -68,9 +72,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpDelete("Delete/{Id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar una categoría por su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Delete(int Id)
         {
             var func = await base.Delete(Id);
@@ -84,8 +87,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpDelete("DeleteAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Eliminar todas las categorías.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> DeleteAll()
         {
             var func = await base.DeleteAll();
@@ -99,8 +102,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Aeropuerto>), StatusCodes.Status200OK)]
+        [SwaggerOperation("Obtener todas las categorías.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Categoria>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -114,16 +117,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Aeropuerto), StatusCodes.Status200OK)]
-      
-        /// <summary>
-        /// Obtiene un registro de Categoría desde la base de datos por su ID.
-        /// </summary>
-        /// <param name="id">ID de la Categoría a obtener.</param>
-        /// <returns>Respuesta de la solicitud.</returns>
-      
+        [SwaggerOperation("Obtener una categoría por su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Categoria))]
         public override async Task<IActionResult> GetById(int id)
         {
             var func = await base.GetById(id);

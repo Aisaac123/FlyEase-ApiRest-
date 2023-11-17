@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace FlyEase_ApiRest_.Controllers
@@ -18,7 +19,8 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para gestionar operaciones del administrador y sus respectivas autenticaciones.
     /// </summary>
-    
+    [SwaggerTag("Metodos de autenticacion y lectura para Administradores")]
+
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextAuthentication>
     {
         private readonly IAuthentication _aut;
@@ -41,9 +43,10 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpGet]
         [Route("GetByUsername/{AdminUsername}")]
-        [ProducesResponseType(typeof(Administrador), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Obtener un administrador por nombre de usuario.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor")]
         public async Task<IActionResult> GetByUsername(string AdminUsername)
         {
             try
@@ -68,9 +71,10 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpPost]
         [Route("Authentication")]
-        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation("Autenticar y autorizar un administrador por medio de JWT (Json Web Token) usando sus credenciales de usuario y contraseña.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(AuthenticationResponse))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor")]
         public async Task<IActionResult> Authentication([FromBody] Administrador admin)
         {
             try
@@ -94,8 +98,9 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpPost]
         [Route("GetRefreshToken")]
-        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("Refrescar un nuevo token de actualización por medio de RT (Refresh Token). Recibe el token expirado y el refresh token.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(AuthenticationResponse))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta")]
         public async Task<IActionResult> GetRefreshToken([FromBody] RefreshTokenRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -111,15 +116,15 @@ namespace FlyEase_ApiRest_.Controllers
                 return BadRequest(autorizacionResponse);
         }
 
-        // Documentación de métodos heredados de la clase abstracta utilizando la palabra clave base
+        // Documentación de métodos heredados de la clase abstracta.
 
         /// <summary>
-        /// Obtiene todos los elementos heredados de la clase base.
+        /// Obtiene todos los Administradores.
         /// </summary>
 
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(List<Administrador>), StatusCodes.Status200OK)] // Actualizado a Administrador
+        [SwaggerOperation("Obtener todos los administradores.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Administrador>))]
         public override async Task<IActionResult> Get()
         {
             var func = await base.Get();
@@ -133,9 +138,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>El elemento solicitado.</returns>
 
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(Administrador), StatusCodes.Status200OK)] // Actualizado a Administrador
+        [SwaggerOperation("Obtener un administrador por ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
         public override async Task<IActionResult> GetById(int id)
         {
             var func = await base.GetById(id);

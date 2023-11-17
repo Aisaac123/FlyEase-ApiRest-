@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Cors;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
 {
@@ -25,7 +27,8 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// </summary>
         /// <returns>Una lista de elementos.</returns>
         [HttpGet("GetAll")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+
         public virtual async Task<IActionResult> Get()
         {
             List<TEntity> lista = new();
@@ -47,6 +50,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// <returns>El elemento solicitado.</returns>
         [HttpGet("GetById/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public virtual async Task<IActionResult> GetById(IdType id)
         {
