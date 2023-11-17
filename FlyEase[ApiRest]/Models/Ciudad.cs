@@ -14,7 +14,6 @@ public partial class Ciudad
     public int? Idregion { get; set; }
 
     public DateTime? Fecharegistro { get; set; }
-    [JsonIgnore]
 
     public byte[] Imagen { get; set; }
 
