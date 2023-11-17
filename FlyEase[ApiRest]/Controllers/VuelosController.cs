@@ -135,10 +135,10 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                GeoCoordinate DespegueCord = new GeoCoordinate(entity.Aereopuerto_Despegue.Coordenadas.Latitud, entity.Aereopuerto_Despegue.Coordenadas.Longitud);
+                GeoCoordinate DespegueCord = new GeoCoordinate(entity.Aeropuerto_Despegue.Coordenadas.Latitud, entity.Aeropuerto_Despegue.Coordenadas.Longitud);
 
                 // Coordenadas de Olaya Herrera, Medellín
-                GeoCoordinate DestinoCord = new GeoCoordinate(entity.Aereopuerto_Destino.Coordenadas.Latitud, entity.Aereopuerto_Destino.Coordenadas.Longitud);
+                GeoCoordinate DestinoCord = new GeoCoordinate(entity.Aeropuerto_Destino.Coordenadas.Latitud, entity.Aeropuerto_Destino.Coordenadas.Longitud);
                 double distance = DespegueCord.GetDistanceTo(DestinoCord) / 1000; 
 
 
@@ -148,8 +148,8 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("v_tarifatemporada", double.Parse(entity.Tarifatemporada.ToString())),
             new NpgsqlParameter("v_descuento", double.Parse(entity.Descuento.ToString())),
             new NpgsqlParameter("v_fechayhoradespegue", entity.Fechayhoradesalida),
-            new NpgsqlParameter("v_iddespegue", entity.Aereopuerto_Despegue.Idaereopuerto),
-            new NpgsqlParameter("v_iddestino", entity.Aereopuerto_Destino.Idaereopuerto),
+            new NpgsqlParameter("v_iddespegue", entity.Aeropuerto_Despegue.Idaereopuerto),
+            new NpgsqlParameter("v_iddestino", entity.Aeropuerto_Destino.Idaereopuerto),
             new NpgsqlParameter("v_idavion", entity.Avion.Idavion),
             new NpgsqlParameter("v_distancia", distance)
                 };
@@ -192,10 +192,10 @@ namespace FlyEase_ApiRest_.Controllers
         {
             try
             {
-                GeoCoordinate DespegueCord = new GeoCoordinate(nuevoVuelo.Aereopuerto_Despegue.Coordenadas.Latitud, nuevoVuelo.Aereopuerto_Despegue.Coordenadas.Longitud);
+                GeoCoordinate DespegueCord = new GeoCoordinate(nuevoVuelo.Aeropuerto_Despegue.Coordenadas.Latitud, nuevoVuelo.Aeropuerto_Despegue.Coordenadas.Longitud);
 
                 // Coordenadas de Olaya Herrera, Medellín
-                GeoCoordinate DestinoCord = new GeoCoordinate(nuevoVuelo.Aereopuerto_Destino.Coordenadas.Latitud, nuevoVuelo.Aereopuerto_Destino.Coordenadas.Longitud);
+                GeoCoordinate DestinoCord = new GeoCoordinate(nuevoVuelo.Aeropuerto_Destino.Coordenadas.Latitud, nuevoVuelo.Aeropuerto_Destino.Coordenadas.Longitud);
                 double distance = DespegueCord.GetDistanceTo(DestinoCord) / 1000;
 
                 var parameters = new NpgsqlParameter[]
@@ -207,8 +207,8 @@ namespace FlyEase_ApiRest_.Controllers
             new NpgsqlParameter("nueva_distancia_recorrida", distance),
             new NpgsqlParameter("nueva_fecha_hora_llegada", nuevoVuelo.Fechayhorallegada),
             new NpgsqlParameter("nuevo_cupo", nuevoVuelo.Cupo),
-            new NpgsqlParameter("nuevo_id_despegue", nuevoVuelo.Aereopuerto_Despegue.Idaereopuerto),
-            new NpgsqlParameter("nuevo_id_destino", nuevoVuelo.Aereopuerto_Destino.Idaereopuerto),
+            new NpgsqlParameter("nuevo_id_despegue", nuevoVuelo.Aeropuerto_Despegue.Idaereopuerto),
+            new NpgsqlParameter("nuevo_id_destino", nuevoVuelo.Aeropuerto_Destino.Idaereopuerto),
             new NpgsqlParameter("nuevo_id_estado", nuevoVuelo.Estado.Idestado),
             new NpgsqlParameter("nuevo_id_avion", nuevoVuelo.Avion.Idavion),
                 };
@@ -228,17 +228,17 @@ namespace FlyEase_ApiRest_.Controllers
         protected override async Task<List<Vuelo>> SetContextList()
         {
             var list = await _context.Set<Vuelo>()
-                    .Include(arg => arg.Aereopuerto_Despegue)
+                    .Include(arg => arg.Aeropuerto_Despegue)
                     .ThenInclude(arg => arg.Ciudad)
                     .ThenInclude(arg => arg.Region)
                     .ThenInclude(arg => arg.Pais)
-                    .Include(arg => arg.Aereopuerto_Despegue)
+                    .Include(arg => arg.Aeropuerto_Despegue)
                     .ThenInclude(arg => arg.Coordenadas)
-                    .Include(arg => arg.Aereopuerto_Destino)
+                    .Include(arg => arg.Aeropuerto_Destino)
                     .ThenInclude(arg => arg.Ciudad)
                     .ThenInclude(arg => arg.Region)
                     .ThenInclude(arg => arg.Pais)
-                    .Include(arg => arg.Aereopuerto_Destino)
+                    .Include(arg => arg.Aeropuerto_Destino)
                     .ThenInclude(arg => arg.Coordenadas)
                     .Include(arg => arg.Estado)
                     .Include(arg => arg.Avion)
@@ -261,17 +261,17 @@ namespace FlyEase_ApiRest_.Controllers
         protected override async Task<Vuelo> SetContextEntity(int id)
         {
             var entity = await _context.Set<Vuelo>()
-                .Include(arg => arg.Aereopuerto_Despegue)
+                .Include(arg => arg.Aeropuerto_Despegue)
                     .ThenInclude(arg => arg.Ciudad)
                     .ThenInclude(arg => arg.Region)
                     .ThenInclude(arg => arg.Pais)
-                    .Include(arg => arg.Aereopuerto_Despegue)
+                    .Include(arg => arg.Aeropuerto_Despegue)
                     .ThenInclude(arg => arg.Coordenadas)
-                    .Include(arg => arg.Aereopuerto_Destino)
+                    .Include(arg => arg.Aeropuerto_Destino)
                     .ThenInclude(arg => arg.Ciudad)
                     .ThenInclude(arg => arg.Region)
                     .ThenInclude(arg => arg.Pais)
-                    .Include(arg => arg.Aereopuerto_Destino)
+                    .Include(arg => arg.Aeropuerto_Destino)
                     .ThenInclude(arg => arg.Coordenadas)
                     .Include(arg => arg.Avion)
                     .Include(arg => arg.Estado)
@@ -292,17 +292,17 @@ namespace FlyEase_ApiRest_.Controllers
             try
             {
                 lista = await _context.Set<Vuelo>()
-                  .Include(arg => arg.Aereopuerto_Despegue)
+                  .Include(arg => arg.Aeropuerto_Despegue)
                   .ThenInclude(arg => arg.Ciudad)
                   .ThenInclude(arg => arg.Region)
                   .ThenInclude(arg => arg.Pais)
-                  .Include(arg => arg.Aereopuerto_Despegue)
+                  .Include(arg => arg.Aeropuerto_Despegue)
                   .ThenInclude(arg => arg.Coordenadas)
-                  .Include(arg => arg.Aereopuerto_Destino)
+                  .Include(arg => arg.Aeropuerto_Destino)
                   .ThenInclude(arg => arg.Ciudad)
                   .ThenInclude(arg => arg.Region)
                   .ThenInclude(arg => arg.Pais)
-                  .Include(arg => arg.Aereopuerto_Destino)
+                  .Include(arg => arg.Aeropuerto_Destino)
                   .ThenInclude(arg => arg.Coordenadas)
                   .Include(arg => arg.Estado)
                   .Include(arg => arg.Avion)

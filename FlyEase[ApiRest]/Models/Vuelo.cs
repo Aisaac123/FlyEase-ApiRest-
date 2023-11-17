@@ -40,9 +40,9 @@ public partial class Vuelo
 
     public virtual Avion Avion { get; set; }
 
-    public virtual Aeropuerto Aereopuerto_Despegue { get; set; }
+    public virtual Aeropuerto Aeropuerto_Despegue { get; set; }
 
-    public virtual Aeropuerto Aereopuerto_Destino { get; set; }
+    public virtual Aeropuerto Aeropuerto_Destino { get; set; }
 
     public virtual Estado Estado { get; set; }
 }

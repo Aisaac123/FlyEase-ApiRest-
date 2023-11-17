@@ -479,12 +479,12 @@ public partial class FlyEaseDataBaseContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_idavion");
 
-            entity.HasOne(d => d.Aereopuerto_Despegue).WithMany(p => p.Despegues)
+            entity.HasOne(d => d.Aeropuerto_Despegue).WithMany(p => p.Despegues)
                 .HasForeignKey(d => d.Iddespegue)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_iddespegue");
 
-            entity.HasOne(d => d.Aereopuerto_Destino).WithMany(p => p.Destinos)
+            entity.HasOne(d => d.Aeropuerto_Destino).WithMany(p => p.Destinos)
                 .HasForeignKey(d => d.Iddestino)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_vuelos_iddestino");
