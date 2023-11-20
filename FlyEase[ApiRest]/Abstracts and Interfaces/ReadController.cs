@@ -26,9 +26,10 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// Obtiene todos los elementos.
         /// </summary>
         /// <returns>Una lista de elementos.</returns>
+        
         [HttpGet("GetAll")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
-
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
         public virtual async Task<IActionResult> Get()
         {
             List<TEntity> lista = new();
@@ -48,10 +49,11 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// </summary>
         /// <param name="id">ID del elemento a obtener.</param>
         /// <returns>El elemento solicitado.</returns>
+        
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta, No se ha podido encontrar el elemento u objeto", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         public virtual async Task<IActionResult> GetById(IdType id)
         {
             try
@@ -59,7 +61,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
                 var entity = await SetContextEntity(id);
                 if (entity == null)
                 {
-                    return BadRequest("No se ha encontrado");
+                    return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = "No se ha encontrado", Success = true, response = entity });
                 }
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", Success = true, response = entity });
             }

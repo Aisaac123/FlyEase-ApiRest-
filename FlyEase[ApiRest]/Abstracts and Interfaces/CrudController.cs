@@ -25,11 +25,11 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// <summary>
         /// Crea un nuevo elemento.
         /// </summary>
+        
         [HttpPost("Post")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Se ha generado un conflicto en la base de datos, por favor rectifica los datos que deseas ingresar", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
-
         public virtual async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             try
@@ -54,11 +54,11 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// <summary>
         /// Actualiza un elemento por ID.
         /// </summary>
+        
         [HttpPut("Put/{Id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
-
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Se ha generado un conflicto en la base de datos, por favor rectifica los datos que deseas ingresar", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
         public virtual async Task<IActionResult> Put([FromBody] TEntity entity, IdType Id)
         {
             try
@@ -83,9 +83,11 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// <summary>
         /// Elimina un elemento por ID.
         /// </summary>
+        
         [HttpDelete("Delete/{Id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Se ha generado un conflicto en la base de datos, por favor rectifica los datos que deseas ingresar", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
         public virtual async Task<IActionResult> Delete(IdType Id)
         {
             try
@@ -110,11 +112,10 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// <summary>
         /// Elimina todos los elementos.
         /// </summary>
+        
         [HttpDelete("DeleteAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "No autorizado, por favor solicitar el token")]
-
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
         public virtual async Task<IActionResult> DeleteAll()
         {
             try

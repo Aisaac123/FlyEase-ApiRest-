@@ -88,7 +88,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpDelete("DeleteAll")]
-        [SwaggerOperation("Eliminar todass las ciudades registradas (Usar Con Precaucion).")]
+        [SwaggerOperation("Eliminar todas las ciudades registradas (Usar Con Precaucion).")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> DeleteAll()
         {
@@ -103,7 +103,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
-        [SwaggerOperation("Obtener todos las ciudades registradas.")]
+        [SwaggerOperation("Obtener todas las ciudades registradas.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Ciudad>))]
         public override async Task<IActionResult> Get()
         {

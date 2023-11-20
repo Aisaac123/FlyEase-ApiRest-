@@ -45,8 +45,8 @@ namespace FlyEase_ApiRest_.Controllers
         [Route("GetByUsername/{AdminUsername}")]
         [SwaggerOperation("Obtener un administrador por nombre de usuario.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         public async Task<IActionResult> GetByUsername(string AdminUsername)
         {
             try
@@ -73,8 +73,8 @@ namespace FlyEase_ApiRest_.Controllers
         [Route("Authentication")]
         [SwaggerOperation("Autenticar y autorizar un administrador por medio de JWT (Json Web Token) usando sus credenciales de usuario y contraseña.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(AuthenticationResponse))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Administrador no autorizado: credenciales erroneas o inactivo", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         public async Task<IActionResult> Authentication([FromBody] Administrador admin)
         {
             try
@@ -100,7 +100,9 @@ namespace FlyEase_ApiRest_.Controllers
         [Route("GetRefreshToken")]
         [SwaggerOperation("Refrescar un nuevo token de actualización por medio de RT (Refresh Token). Recibe el token expirado y el refresh token.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(AuthenticationResponse))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta, El token se encuentra vigente", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Conflicto: RefreshToken no registrado", typeof(string))]
+
         public async Task<IActionResult> GetRefreshToken([FromBody] RefreshTokenRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -111,9 +113,9 @@ namespace FlyEase_ApiRest_.Controllers
             x.Type == JwtRegisteredClaimNames.NameId).Value.ToString();
             var autorizacionResponse = await _aut.GetRefreshToken(int.Parse(idUsuario), request);
             if (autorizacionResponse.Succes)
-                return Ok(autorizacionResponse);
+                return StatusCode(StatusCodes.Status200OK, new { response = autorizacionResponse });
             else
-                return BadRequest(autorizacionResponse);
+                return StatusCode(StatusCodes.Status409Conflict, new { response = autorizacionResponse });
         }
 
         // Documentación de métodos heredados de la clase abstracta.

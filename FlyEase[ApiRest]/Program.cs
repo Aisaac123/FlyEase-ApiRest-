@@ -39,14 +39,11 @@ builder.Services.AddSwaggerGen(c =>
         Type = "string",
         Example = new OpenApiString("Texto")
     });
-    c.MapType<int>(() => new OpenApiSchema
-    {
-        Type = "integer - int",
-        Example = new OpenApiString("Valor numerico entero")
-    });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Autorizacion JWT usando el esquema de Bearer, Ingresa un token valido",
+        Description = "Autorizacion JWT usando el esquema Bearer, Ingresa un token valido.\n si todavia no tienes uno, puedes solicitarlo con los metodos:" +
+        " \n --Administradores/Authentication" +
+        " \n --ApplicationTokens/GenerateAppsToken",
         Type = SecuritySchemeType.Http,
         Scheme = "bearer"
     });
@@ -154,20 +151,30 @@ app.UseSwaggerUI(c =>
     c.OAuthAppName("Swagger");
     c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 });
-app.Map("/swagger", swaggerApp =>
+app.Map("/FlyEaseWebApiSwaggerUI", swaggerApp =>
 {
     swaggerApp.UseStaticFiles(); // Si es necesario para servir archivos estáticos
     swaggerApp.Use(async (context, next) =>
     {
-        if (context.Request.Path.StartsWithSegments("/swagger") &&
-            !context.Request.Path.Value.EndsWith("index.html"))
+        if (context.Request.Path == "/" || context.Request.Path == "")
         {
-            // Sirve la página HTML personalizada
-            context.Request.Path = "/swagger/index.html";
+            // Sirve la página HTML deseada en la raíz de la aplicación
+            context.Request.Path = "/FlyEaseWebApiSwaggerUI/index.html";
         }
 
         await next();
     });
+});
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/swagger" || context.Request.Path == "//" || context.Request.Path == "/s" || context.Request.Path == "/S")
+    {
+        context.Response.Redirect("/FlyEaseWebApiSwaggerUI/index.html");
+        return;
+    }
+
+    await next();
 });
 app.UseHttpsRedirection();
 
