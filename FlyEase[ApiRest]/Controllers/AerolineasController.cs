@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
@@ -47,6 +48,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpPost("Post")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Registrar una nueva Aerolinea.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Post([FromBody] Aerolinea entity)
@@ -60,6 +62,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpPut("Put/{Id}")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Actualizar un registro de Aerolinea existente.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Put([FromBody] Aerolinea entity, int Id)
@@ -99,6 +102,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// </summary>
 
             [HttpGet("GetAll")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Obtener todos los registros de Aerolineas.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Aerolinea>))]
             public override async Task<IActionResult> Get()
@@ -114,6 +118,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>La Aerolinea solicitada.</returns>
 
             [HttpGet("GetById/{id}")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Obtener un registro de Aerolinea por ID.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Aerolinea))]
             public override async Task<IActionResult> GetById(int id)

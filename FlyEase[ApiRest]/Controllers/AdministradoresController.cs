@@ -41,29 +41,29 @@ namespace FlyEase_ApiRest_.Controllers
         /// Obtiene un administrador por nombre de usuario.
         /// </summary>
 
-        [HttpGet]
-        [Route("GetByUsername/{AdminUsername}")]
-        [SwaggerOperation("Obtener un administrador por nombre de usuario.")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta", typeof(string))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
-        public async Task<IActionResult> GetByUsername(string AdminUsername)
-        {
-            try
-            {
-                var Admin = await _context.Administradores.FirstOrDefaultAsync(a => a.Usuario == AdminUsername);
-                if (Admin == null)
-                {
-                    return BadRequest("No se ha encontrado");
-                }
+        //[HttpGet]
+        //[Route("GetByUsername/{AdminUsername}")]
+        //[SwaggerOperation("Obtener un administrador por nombre de usuario.")]
+        //[SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
+        //[SwaggerResponse(StatusCodes.Status400BadRequest, "Solicitud incorrecta", typeof(string))]
+        //[SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
+        //public async Task<IActionResult> GetByUsername(string AdminUsername)
+        //{
+        //    try
+        //    {
+        //        var Admin = await _context.Administradores.FirstOrDefaultAsync(a => a.Usuario == AdminUsername);
+        //        if (Admin == null)
+        //        {
+        //            return BadRequest("No se ha encontrado");
+        //        }
 
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = Admin });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
-            }
-        }
+        //        return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = Admin });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+        //    }
+        //}
 
         /// <summary>
         /// Autentica un administrador.
@@ -124,14 +124,14 @@ namespace FlyEase_ApiRest_.Controllers
         /// Obtiene todos los Administradores.
         /// </summary>
 
-        [HttpGet("GetAll")]
-        [SwaggerOperation("Obtener todos los administradores.")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Administrador>))]
-        public override async Task<IActionResult> Get()
-        {
-            var func = await base.Get();
-            return func;
-        }
+        //[HttpGet("GetAll")]
+        //[SwaggerOperation("Obtener todos los administradores.")]
+        //[SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Administrador>))]
+        //public override async Task<IActionResult> Get()
+        //{
+        //    var func = await base.Get();
+        //    return func;
+        //}
 
         /// <summary>
         /// Obtiene un elemento por ID heredado de la clase base.
@@ -139,14 +139,14 @@ namespace FlyEase_ApiRest_.Controllers
         /// <param name="id">ID del elemento a obtener.</param>
         /// <returns>El elemento solicitado.</returns>
 
-        [HttpGet("GetById/{id}")]
-        [SwaggerOperation("Obtener un administrador por ID.")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
-        public override async Task<IActionResult> GetById(int id)
-        {
-            var func = await base.GetById(id);
-            return func;
+        //[HttpGet("GetById/{id}")]
+        //[SwaggerOperation("Obtener un administrador por ID.")]
+        //[SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Administrador))]
+        //public override async Task<IActionResult> GetById(int id)
+        //{
+        //    var func = await base.GetById(id);
+        //    return func;
 
-        }
+        //}
     }
 }

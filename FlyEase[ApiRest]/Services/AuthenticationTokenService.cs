@@ -83,7 +83,7 @@ namespace FlyEase_ApiRest_.Authentication
             {
                 claims.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, Identifier));
-                dateTime = DateTime.UtcNow.AddMinutes(2);
+                dateTime = DateTime.UtcNow.AddMinutes(5);
             }
             stringkey = "FlyEaseWebApiTokenEncryptedKeyString";
             var keyBytes = Encoding.ASCII.GetBytes(stringkey);

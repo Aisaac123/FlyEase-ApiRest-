@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -36,6 +37,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
      
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Registrar un nuevo Asiento.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Asiento entity)
@@ -53,6 +55,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
      
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar un registro de Asiento existente.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Asiento entity, int Id)
@@ -99,6 +102,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
     
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener todos los registros de Asientos.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Asiento>))]
         public override async Task<IActionResult> Get()
@@ -114,6 +118,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
      
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener un registro de Asiento por ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Asiento))]
         public override async Task<IActionResult> GetById(int id)

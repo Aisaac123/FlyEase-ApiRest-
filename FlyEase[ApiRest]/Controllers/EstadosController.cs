@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,9 +9,11 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace FlyEase_ApiRest_.Controllers
 {
     [EnableCors("Reglas")]
+    
     /// <summary>
     /// Controlador de lectura para los Estados registrados.
     /// </summary>
+    
     [SwaggerTag("Metodos de lectura para Estados")]
 
     public class EstadosController : ReadController<Estado, int, FlyEaseDataBaseContextAuthentication>
@@ -34,6 +37,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// </summary>
 
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation(Summary = "Obtener todos los Estados.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Consulta realizada con exito", typeof(List<Estado>))]
         public override async Task<IActionResult> Get()
@@ -49,6 +53,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>El elemento solicitado.</returns>
 
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation(Summary = "Obtener un Estado por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(Estado))]
     public override async Task<IActionResult> GetById(int id)

@@ -85,6 +85,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// </summary>
         
         [HttpDelete("Delete/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerResponse(StatusCodes.Status409Conflict, "Se ha generado un conflicto en la base de datos, por favor rectifica los datos que deseas ingresar", typeof(string))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
@@ -114,6 +115,7 @@ namespace FlyEase_ApiRest_.Abstracts_and_Interfaces
         /// </summary>
         
         [HttpDelete("DeleteAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor", typeof(string))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "No autorizado, por favor solicitar el token", typeof(string))]
         public virtual async Task<IActionResult> DeleteAll()

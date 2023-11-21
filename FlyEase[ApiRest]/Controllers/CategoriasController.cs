@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -39,6 +40,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// 
         
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
+
         [SwaggerOperation("Registrar una nueva categoría.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Categoria entity)
@@ -56,6 +59,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
+
         [SwaggerOperation("Actualizar una categoría por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Categoria entity, int Id)
@@ -102,6 +107,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
+
         [SwaggerOperation("Obtener todas las categorías.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Categoria>))]
         public override async Task<IActionResult> Get()
@@ -117,6 +124,8 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
+
         [SwaggerOperation("Obtener una categoría por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Categoria))]
         public override async Task<IActionResult> GetById(int id)

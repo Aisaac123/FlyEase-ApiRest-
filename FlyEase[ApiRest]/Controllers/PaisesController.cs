@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -39,6 +40,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Registrar un nuevo país")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se ha creado el país con éxito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Pais entity)
@@ -56,6 +58,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar información de un país existente")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se ha actualizado el país con éxito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Pais entity, int Id)
@@ -103,6 +106,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
+        [Authorize]
         [SwaggerOperation("Obtener todos los países")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se han obtenido todos los países con éxito", typeof(List<Pais>))]
         public override async Task<IActionResult> Get()
@@ -118,6 +122,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener un país por su ID")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se ha obtenido el país con éxito", typeof(Pais))]
         public override async Task<IActionResult> GetById(int id)

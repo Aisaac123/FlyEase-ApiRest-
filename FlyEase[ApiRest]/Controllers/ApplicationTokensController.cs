@@ -94,7 +94,7 @@ namespace FlyEase_ApiRest_.Controllers
                 }
 
                 var Token = new JwtSecurityTokenHandler().ReadJwtToken(Cliente.Token);
-                if (Token.ValidTo <= DateTime.UtcNow.AddMinutes(1))
+                if (Token.ValidTo <= DateTime.UtcNow.AddMinutes(5))
                 {
                     var Aut = await _aut.GetToken();
                     if (!Aut.Succes)

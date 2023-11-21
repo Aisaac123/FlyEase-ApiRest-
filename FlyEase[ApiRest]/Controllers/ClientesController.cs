@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NuGet.Common;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -42,6 +43,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// 
 
         [HttpPost("Post")]
+        [Authorize]
         [SwaggerOperation("Registrar un cliente.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Cliente entity)
@@ -59,6 +61,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar un cliente especifico por medio de su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Cliente entity, string Id)
@@ -105,6 +108,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener todos los clientes registrados.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Cliente>))]
         public override async Task<IActionResult> Get()
@@ -120,6 +124,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetById/{id}")]
+        [Authorize]
         [SwaggerOperation("Obtener un cliente por medio de su ID (No.Documento).")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(Cliente))]
         public override async Task<IActionResult> GetById(string id)
@@ -220,6 +225,7 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpGet]
         [Route("GetById/{id_cliente}/Boletos")]
+        [Authorize]
         [SwaggerOperation("Obtener todos los boletos de un cliente en especifico.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Boleto>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Cliente no encontrado o datos erroneos", typeof(string))]

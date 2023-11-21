@@ -40,6 +40,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Registra un vuelo")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se ha creado y registrado con exito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Vuelo entity)
@@ -56,6 +57,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Resultado de la operación.</returns>
 
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar los datos de un vuelo")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Se ha actualizado con éxito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Vuelo entity, int Id)
@@ -99,7 +101,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Lista de vuelos.</returns>
 
         [HttpGet("GetAll")]
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener todos los vuelos registrados")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Consulta realizada con exito", typeof(List<Vuelo>))]
         public override async Task<IActionResult> Get()
@@ -115,6 +117,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>El vuelo solicitado.</returns>
 
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener un vuelo especifico")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Consulta unica Realizada con exito", typeof(Vuelo))]
         public override async Task<IActionResult> GetById(int id)
@@ -364,6 +367,7 @@ namespace FlyEase_ApiRest_.Controllers
 
         [HttpGet]
         [Route("{idVuelo}/Avion/AsientosDisponibles")]
+        [Authorize]
         [SwaggerOperation("Obtener asientos disponibles y ocupados de un vuelo especifico")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Operacion Realizada con exito", typeof(List<Asiento>))]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Error interno del servidor", typeof(string))]

@@ -9,6 +9,7 @@ using NpgsqlTypes;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
@@ -53,6 +54,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>Respuesta de la solicitud.</returns>
 
             [HttpPost("Post")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Registrar un nuevo Aeropuerto.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Post([FromBody] Aeropuerto entity)
@@ -70,6 +72,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>Respuesta de la solicitud.</returns>
 
             [HttpPut("Put/{Id}")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Actualizar un registro de Aeropuerto existente.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
             public override async Task<IActionResult> Put([FromBody] Aeropuerto entity, int Id)
@@ -116,6 +119,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>Respuesta de la solicitud.</returns>
 
             [HttpGet("GetAll")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Obtener todos los registros de Aeropuertos.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Aeropuerto>))]
             public override async Task<IActionResult> Get()
@@ -131,6 +135,7 @@ namespace FlyEase_ApiRest_.Controllers
             /// <returns>Respuesta de la solicitud.</returns>
 
             [HttpGet("GetById/{id}")]
+            [Authorize(Policy = "Admin Policy")]
             [SwaggerOperation("Obtener un registro de Aeropuerto por ID.")]
             [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Aeropuerto))]
             public override async Task<IActionResult> GetById(int id)

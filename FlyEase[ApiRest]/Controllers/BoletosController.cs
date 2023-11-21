@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -37,6 +38,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpPost("Post")]
+        [Authorize]
         [SwaggerOperation("Registrar un nuevo boleto.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Boleto entity)
@@ -54,6 +56,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpPut("Put/{Id}")]
+        [Authorize]
         [SwaggerOperation("Actualizar un boleto por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Boleto entity, int Id)
@@ -100,6 +103,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
       
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener todos los boletos.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Boleto>))]
         public override async Task<IActionResult> Get()
@@ -115,6 +119,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
       
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener un boleto por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Boleto))]
         public override async Task<IActionResult> GetById(int id)

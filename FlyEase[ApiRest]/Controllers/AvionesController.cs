@@ -1,6 +1,7 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -39,6 +40,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Registrar un nuevo avión.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Avion entity)
@@ -56,6 +58,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar un avión por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Avion entity, string Id)
@@ -102,6 +105,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
        
         [HttpGet("GetAll")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener todos los aviones.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(List<Avion>))]
         public override async Task<IActionResult> Get()
@@ -117,6 +121,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
         
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener un avión por su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Avion))]
         public override async Task<IActionResult> GetById(string id)

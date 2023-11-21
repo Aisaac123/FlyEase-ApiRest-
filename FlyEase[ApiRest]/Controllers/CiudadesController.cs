@@ -9,6 +9,7 @@ using Npgsql;
 using NpgsqlTypes;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlyEase_ApiRest_.Controllers
 {
@@ -40,6 +41,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPost("Post")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Registrar una ciudad.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Post([FromBody] Ciudad entity)
@@ -57,6 +59,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpPut("Put/{Id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Actualizar una ciudad especifica por medio de su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(string))]
         public override async Task<IActionResult> Put([FromBody] Ciudad entity, int Id)
@@ -103,6 +106,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetAll")]
+        [Authorize]
         [SwaggerOperation("Obtener todas las ciudades registradas.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(List<Ciudad>))]
         public override async Task<IActionResult> Get()
@@ -118,6 +122,7 @@ namespace FlyEase_ApiRest_.Controllers
         /// <returns>Respuesta de la solicitud.</returns>
 
         [HttpGet("GetById/{id}")]
+        [Authorize(Policy = "Admin Policy")]
         [SwaggerOperation("Obtener una ciudad por medio de su ID.")]
         [SwaggerResponse(StatusCodes.Status200OK, "Operacion realizada con exito", typeof(Ciudad))]
         public override async Task<IActionResult> GetById(int id)

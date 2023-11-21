@@ -96,8 +96,8 @@ builder.Services.AddAuthentication(config =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("CommonUser"));
+    options.AddPolicy("Admin Policy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("User Policy", policy => policy.RequireRole("CommonUser"));
 });
 
 builder.Services.AddSignalR();
