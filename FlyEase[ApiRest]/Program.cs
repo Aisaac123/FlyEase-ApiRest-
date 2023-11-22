@@ -1,7 +1,7 @@
-using FlyEase_ApiRest_;
 using FlyEase_ApiRest_.Authentication;
-using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Hub;
+using FlyEase_ApiRest_.Models.Contexto;
+using FlyEase_ApiRest_.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

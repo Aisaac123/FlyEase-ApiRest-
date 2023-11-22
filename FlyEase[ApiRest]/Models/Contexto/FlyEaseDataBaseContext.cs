@@ -2,7 +2,7 @@
 using FlyEase_ApiRest_.Models.Commons;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlyEase_ApiRest_.Contexto;
+namespace FlyEase_ApiRest_.Models.Contexto;
 
 public partial class FlyEaseDataBaseContextAuthentication : DbContext
 {

@@ -1,6 +1,6 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
-using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
+using FlyEase_ApiRest_.Models.Contexto;
 using GeoCoordinatePortable;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;

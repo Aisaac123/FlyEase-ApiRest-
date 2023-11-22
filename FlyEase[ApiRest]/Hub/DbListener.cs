@@ -1,4 +1,4 @@
-﻿using FlyEase_ApiRest_.Contexto;
+﻿using FlyEase_ApiRest_.Models.Contexto;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;

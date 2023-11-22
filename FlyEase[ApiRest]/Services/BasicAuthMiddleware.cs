@@ -4,9 +4,9 @@ using Npgsql;
 using NpgsqlTypes;
 using System.Text;
 
-namespace FlyEase_ApiRest_
+namespace FlyEase_ApiRest_.Services
 {
-    using FlyEase_ApiRest_.Contexto;
+    using FlyEase_ApiRest_.Models.Contexto;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using System;

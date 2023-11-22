@@ -1,5 +1,4 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
-using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
@@ -9,6 +8,7 @@ using NpgsqlTypes;
 
 namespace FlyEase_ApiRest_.Controllers
 {
+    using FlyEase_ApiRest_.Models.Contexto;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

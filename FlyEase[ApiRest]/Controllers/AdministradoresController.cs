@@ -1,8 +1,8 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
 using FlyEase_ApiRest_.Authentication;
-using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using FlyEase_ApiRest_.Models.Commons;
+using FlyEase_ApiRest_.Models.Contexto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;

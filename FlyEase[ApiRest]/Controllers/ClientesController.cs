@@ -1,5 +1,4 @@
 ﻿using FlyEase_ApiRest_.Abstracts_and_Interfaces;
-using FlyEase_ApiRest_.Contexto;
 using FlyEase_ApiRest_.Models;
 using Microsoft.AspNetCore.SignalR;
 
@@ -10,6 +9,7 @@ using Npgsql;
 using NuGet.Common;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using FlyEase_ApiRest_.Models.Contexto;
 
 namespace FlyEase_ApiRest_.Controllers
 {
