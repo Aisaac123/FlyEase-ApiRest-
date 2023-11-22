@@ -185,6 +185,7 @@ namespace FlyEase_ApiRest_.Controllers
                 return ex.Message;
             }
         }
+        
         /// <summary>
         /// Actualiza un registro de Categoría en la base de datos por su ID.
         /// </summary>

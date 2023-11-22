@@ -19,6 +19,7 @@ namespace FlyEase_ApiRest_.Controllers
     /// <summary>
     /// Controlador para gestionar operaciones del administrador y sus respectivas autenticaciones.
     /// </summary>
+    
     [SwaggerTag("Metodos de autenticacion y lectura para Administradores")]
 
     public class AdministradoresController : ReadController<Administrador, int, FlyEaseDataBaseContextAuthentication>
